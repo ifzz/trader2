@@ -1,8 +1,9 @@
 #ifndef _LTS_MDUSER_HANDLER_H_
 #define _LTS_MDUSER_HANDLER_H_
 
-#include "lts/SecurityFtdcUserApiStruct.h"
-#include "lts/SecurityFtdcMdApi.h"
+#include "SecurityFtdcUserApiDataType.h"
+#include "SecurityFtdcUserApiStruct.h"
+#include "SecurityFtdcMdApi.h"
 
 #ifdef __cplusplus
 extern "C" {

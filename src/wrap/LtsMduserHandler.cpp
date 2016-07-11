@@ -1,4 +1,12 @@
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "SecurityFtdcUserApiDataType.h"
+#include "SecurityFtdcUserApiStruct.h"
+#include "SecurityFtdcMdApi.h"
+
 #include "LtsMduserHandler.h"
 
 CLtsMduserHandler::CLtsMduserHandler(lts_mduser_api_cb *pUserCb, void * parent)

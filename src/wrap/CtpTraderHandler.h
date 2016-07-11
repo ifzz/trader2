@@ -1,8 +1,10 @@
 #ifndef _CTP_TRADER_HANDLER_H_
 #define _CTP_TRADER_HANDLER_H_
 
+#include "ThostFtdcUserApiDataType.h"
+#include "ThostFtdcUserApiStruct.h"
+#include "ThostFtdcTraderApi.h"
 
-#include "ctp/ThostFtdcTraderApi.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

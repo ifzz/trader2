@@ -8,7 +8,7 @@
 #include<unistd.h>
 #include <time.h>
 
-#include "cfg/cmn_cfg.h"
+#include "cmn_cfg.h"
 
 #include "cmn_log_util.h"
 #include "cmn_log.h"

@@ -1,7 +1,9 @@
 #ifndef _CTP_MDUSER_HANDLER_H_
 #define _CTP_MDUSER_HANDLER_H_
 
-#include "ctp/ThostFtdcMdApi.h"
+#include "ThostFtdcUserApiDataType.h"
+#include "ThostFtdcUserApiStruct.h"
+#include "ThostFtdcMdApi.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,4 +1,12 @@
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "ThostFtdcUserApiDataType.h"
+#include "ThostFtdcUserApiStruct.h"
+#include "ThostFtdcMdApi.h"
+
 #include "CtpMduserHandler.h"
 
 CCtpMduserHandler::CCtpMduserHandler(ctp_mduser_api_cb *pUserCb, void * parent)

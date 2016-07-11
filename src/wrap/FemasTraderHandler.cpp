@@ -1,3 +1,12 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "USTPFtdcUserApiDataType.h"
+#include "USTPFtdcUserApiStruct.h"
+#include "USTPFtdcTraderApi.h"
+
 #include "FemasTraderHandler.h"
 
 CFemasTraderHandler::CFemasTraderHandler(femas_trader_api_cb* cb, void* arg)

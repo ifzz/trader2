@@ -5,7 +5,7 @@
 
 #include <event2/util.h>
 
-#include "util/cmn_util.h"
+#include "cmn_util.h"
 
 #include "trader_mduser_api.h"
 

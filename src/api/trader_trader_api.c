@@ -206,7 +206,7 @@ void trader_trader_api_on_rsp_qry_instrument(trader_trader_api* self, trader_ins
   if(err_msg){
     strcpy(oEvent.ErrorMsg, err_msg);
   }
-  memcpy(&oEvent.Body.InstrumentRsp, pRspInstrument, sizeof(oEvent.Body.InstrumentRsp));
+  memcpy(&(oEvent.Body.InstrumentRsp), pRspInstrument, sizeof(oEvent.Body.InstrumentRsp));
 
   cmn_util_evbuffer_send(self->fd, (unsigned char*)&oEvent, sizeof(oEvent));
 
@@ -221,7 +221,7 @@ void trader_trader_api_on_rsp_qry_investor_position(trader_trader_api* self, tra
   if(err_msg){
     strcpy(oEvent.ErrorMsg, err_msg);
   }
-  memcpy(&oEvent.Body.PositionRsp, pInvestorPosition, sizeof(oEvent.Body.PositionRsp));
+  memcpy(&(oEvent.Body.PositionRsp), pInvestorPosition, sizeof(oEvent.Body.PositionRsp));
 
   cmn_util_evbuffer_send(self->fd, (unsigned char*)&oEvent, sizeof(oEvent));
 
@@ -237,7 +237,7 @@ void trader_trader_api_on_rsp_qry_trading_account(trader_trader_api* self, trade
     strcpy(oEvent.ErrorMsg, err_msg);
   }
   
-  memcpy(&oEvent.Body.AccountRsp, pTradingAcount, sizeof(oEvent.Body.AccountRsp));
+  memcpy(&(oEvent.Body.AccountRsp), pTradingAcount, sizeof(oEvent.Body.AccountRsp));
 
   cmn_util_evbuffer_send(self->fd, (unsigned char*)&oEvent, sizeof(oEvent));
 

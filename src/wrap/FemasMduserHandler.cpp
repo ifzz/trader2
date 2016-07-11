@@ -1,10 +1,11 @@
-///@system	 飞马行情接受系统
-///@company  上海金融期货信息技术有限公司
-///@file	 USTPMDHandler.h
-///@brief	 api实现
-///@history 
-///20130502: 徐忠华 创建
-//////////////////////////////////////////////////////////////////////
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "USTPFtdcUserApiDataType.h"
+#include "USTPFtdcUserApiStruct.h"
+#include "USTPFtdcMduserApi.h"
 
 #include "FemasMduserHandler.h"
 

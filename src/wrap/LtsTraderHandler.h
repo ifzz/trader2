@@ -1,9 +1,9 @@
 #ifndef _LTS_TRADER_HANDLER_H_
 #define _LTS_TRADER_HANDLER_H_
 
-#include "lts/SecurityFtdcUserApiStruct.h"
-#include "lts/SecurityFtdcTraderApi.h"
-#include "lts/SecurityFtdcQueryApi.h"
+#include "SecurityFtdcUserApiStruct.h"
+#include "SecurityFtdcTraderApi.h"
+#include "SecurityFtdcQueryApi.h"
 
 #ifdef __cplusplus
 extern "C" {
