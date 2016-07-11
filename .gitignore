@@ -31,3 +31,26 @@
 # Debug files
 *.dSYM/
 *.su
+
+#Other
+.deps
+COPYING
+INSTALL
+Makefile
+Makefile.in
+AUTHORS
+ChangeLog
+NEWS
+README
+aclocal.m4
+autom4te.cache
+config.h
+config.h.in
+config.log
+config.status
+config
+configure
+configure.ac
+sqlite3
+stamp-h1
+
