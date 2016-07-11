@@ -1,0 +1,19 @@
+FemasTraderHandler.o: FemasTraderHandler.cpp /usr/include/stdc-predef.h \
+ FemasTraderHandler.h ../../femas/USTPFtdcUserApiDataType.h \
+ ../../femas/USTPFtdcUserApiStruct.h \
+ ../../femas/USTPFtdcUserApiDataType.h ../../femas/USTPFtdcTraderApi.h \
+ ../../femas/USTPFtdcUserApiStruct.h
+
+/usr/include/stdc-predef.h:
+
+FemasTraderHandler.h:
+
+../../femas/USTPFtdcUserApiDataType.h:
+
+../../femas/USTPFtdcUserApiStruct.h:
+
+../../femas/USTPFtdcUserApiDataType.h:
+
+../../femas/USTPFtdcTraderApi.h:
+
+../../femas/USTPFtdcUserApiStruct.h:

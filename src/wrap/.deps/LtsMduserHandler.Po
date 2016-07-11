@@ -1,0 +1,16 @@
+LtsMduserHandler.o: LtsMduserHandler.cpp /usr/include/stdc-predef.h \
+ LtsMduserHandler.h ../../lts/SecurityFtdcUserApiStruct.h \
+ ../../lts/SecurityFtdcUserApiDataType.h ../../lts/SecurityFtdcMdApi.h \
+ ../../lts/SecurityFtdcUserApiStruct.h
+
+/usr/include/stdc-predef.h:
+
+LtsMduserHandler.h:
+
+../../lts/SecurityFtdcUserApiStruct.h:
+
+../../lts/SecurityFtdcUserApiDataType.h:
+
+../../lts/SecurityFtdcMdApi.h:
+
+../../lts/SecurityFtdcUserApiStruct.h:

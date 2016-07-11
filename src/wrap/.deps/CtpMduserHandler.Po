@@ -1,0 +1,13 @@
+CtpMduserHandler.o: CtpMduserHandler.cpp /usr/include/stdc-predef.h \
+ CtpMduserHandler.h ../../ctp/ThostFtdcMdApi.h \
+ ../../ctp/ThostFtdcUserApiStruct.h ../../ctp/ThostFtdcUserApiDataType.h
+
+/usr/include/stdc-predef.h:
+
+CtpMduserHandler.h:
+
+../../ctp/ThostFtdcMdApi.h:
+
+../../ctp/ThostFtdcUserApiStruct.h:
+
+../../ctp/ThostFtdcUserApiDataType.h:
