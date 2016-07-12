@@ -38,8 +38,6 @@ struct CUstpFtdcReqUserLoginField
 	TUstpFtdcMacAddressType	MacAddress;
 	///数据中心代码
 	TUstpFtdcDataCenterIDType	DataCenterID;
-	///客户端运行文件大小
-	TUstpFtdcFileSizeType	UserProductFileSize;
 };
 ///系统用户登录应答
 struct CUstpFtdcRspUserLoginField
@@ -62,6 +60,8 @@ struct CUstpFtdcRspUserLoginField
 	TUstpFtdcSequenceNoType	PrivateFlowSize;
 	///交易员私有流当前长度
 	TUstpFtdcSequenceNoType	UserFlowSize;
+	///业务发生日期
+	TUstpFtdcDateType	ActionDay;
 };
 ///用户登出请求
 struct CUstpFtdcReqUserLogoutField
@@ -71,7 +71,7 @@ struct CUstpFtdcReqUserLogoutField
 	///交易用户代码
 	TUstpFtdcUserIDType	UserID;
 };
-///用户登出响应
+///用户登出请求
 struct CUstpFtdcRspUserLogoutField
 {
 	///经纪公司编号
@@ -112,8 +112,6 @@ struct CUstpFtdcInputOrderField
 	TUstpFtdcInvestorIDType	InvestorID;
 	///用户代码
 	TUstpFtdcUserIDType	UserID;
-	///指定通过此席位序号下单
-	TUstpFtdcSeatNoType	SeatNo;
 	///合约代码
 	TUstpFtdcInstrumentIDType	InstrumentID;
 	///用户本地报单号
@@ -148,6 +146,10 @@ struct CUstpFtdcInputOrderField
 	TUstpFtdcBusinessUnitType	BusinessUnit;
 	///用户自定义域
 	TUstpFtdcCustomType	UserCustom;
+	///本地业务标识
+	TUstpFtdcBusinessLocalIDType	BusinessLocalID;
+	///业务发生日期
+	TUstpFtdcDateType	ActionDay;
 };
 ///报单操作
 struct CUstpFtdcOrderActionField
@@ -172,50 +174,14 @@ struct CUstpFtdcOrderActionField
 	TUstpFtdcPriceType	LimitPrice;
 	///数量变化
 	TUstpFtdcVolumeType	VolumeChange;
+	///本地业务标识
+	TUstpFtdcBusinessLocalIDType	BusinessLocalID;
 };
 ///内存表导出
 struct CUstpFtdcMemDbField
 {
 	///内存表名
 	TUstpFtdcMemTableNameType	MemTableName;
-};
-///用户请求出入金
-struct CUstpFtdcstpUserDepositField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///用户代码
-	TUstpFtdcUserIDType	UserID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///金额
-	TUstpFtdcMoneyType	Amount;
-	///出入金方向
-	TUstpFtdcAccountDirectionType	AmountDirection;
-	///用户本地报单号
-	TUstpFtdcUserOrderLocalIDType	UserOrderLocalID;
-};
-///用户主次席出入金
-struct CUstpFtdcstpTransferMoneyField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///用户代码
-	TUstpFtdcUserIDType	UserID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///金额
-	TUstpFtdcMoneyType	Amount;
-	///出入金方向
-	TUstpFtdcAccountDirectionType	AmountDirection;
-	///用户本地报单号
-	TUstpFtdcUserOrderLocalIDType	UserOrderLocalID;
-	///银行机构代码
-	TUstpFtdcBankIDType	BankID;
-	///银行转账密码
-	TUstpFtdcBankPasswdType	BankPasswd;
-	///主席转账密码
-	TUstpFtdcAccountPasswdType	AccountPasswd;
 };
 ///响应信息
 struct CUstpFtdcRspInfoField
@@ -240,8 +206,6 @@ struct CUstpFtdcQryOrderField
 	TUstpFtdcOrderSysIDType	OrderSysID;
 	///合约代码
 	TUstpFtdcInstrumentIDType	InstrumentID;
-	///报单状态
-	TUstpFtdcOrderStatusType	OrderStatus;
 };
 ///成交查询
 struct CUstpFtdcQryTradeField
@@ -336,6 +300,8 @@ struct CUstpFtdcRspInstrumentField
 	TUstpFtdcPriceType	StrikePrice;
 	///期权类型
 	TUstpFtdcOptionsTypeType	OptionsType;
+	///币种代码
+	TUstpFtdcCurrencyIDType	CurrencyID;
 };
 ///合约状态
 struct CUstpFtdcInstrumentStatusField
@@ -404,6 +370,10 @@ struct CUstpFtdcInstrumentStatusField
 	TUstpFtdcPriceType	StrikePrice;
 	///期权类型
 	TUstpFtdcOptionsTypeType	OptionsType;
+	///币种代码
+	TUstpFtdcCurrencyIDType	CurrencyID;
+	///进入本状态日期
+	TUstpFtdcDateType	EnterDate;
 };
 ///投资者资金查询
 struct CUstpFtdcQryInvestorAccountField
@@ -572,6 +542,8 @@ struct CUstpFtdcRspInvestorPositionField
 	TUstpFtdcVolumeType	FrozenPosition;
 	///平仓冻结持仓
 	TUstpFtdcVolumeType	FrozenClosing;
+	///平昨仓冻结持仓
+	TUstpFtdcVolumeType	YdFrozenClosing;
 	///冻结的权利金
 	TUstpFtdcMoneyType	FrozenPremium;
 	///最后一笔成交编号
@@ -688,10 +660,6 @@ struct CUstpFtdcInvestorFeeField
 	TUstpFtdcRatioType	OTFeeRate;
 	///平今仓手续费按手数
 	TUstpFtdcRatioType	OTFeeAmt;
-	///每笔订单收取的申报费
-	TUstpFtdcRatioType	PerOrderAmt;
-	///每笔撤单收取的申报费
-	TUstpFtdcRatioType	PerCancelAmt;
 };
 ///投资者保证金率查询
 struct CUstpFtdcQryInvestorMarginField
@@ -748,8 +716,6 @@ struct CUstpFtdcTradeField
 	TUstpFtdcClientIDType	ClientID;
 	///用户编号
 	TUstpFtdcUserIDType	UserID;
-	///下单用户编号
-	TUstpFtdcUserIDType	OrderUserID;
 	///成交编号
 	TUstpFtdcTradeIDType	TradeID;
 	///报单编号
@@ -772,22 +738,10 @@ struct CUstpFtdcTradeField
 	TUstpFtdcTimeType	TradeTime;
 	///清算会员编号
 	TUstpFtdcParticipantIDType	ClearingPartID;
-	///本次成交手续费
-	TUstpFtdcMoneyType	UsedFee;
-	///本次成交占用保证金
-	TUstpFtdcMoneyType	UsedMargin;
-	///本次成交占用权利金
-	TUstpFtdcMoneyType	Premium;
-	///持仓表今持仓量
-	TUstpFtdcVolumeType	Position;
-	///持仓表今日持仓成本
-	TUstpFtdcPriceType	PositionCost;
-	///资金表可用资金
-	TUstpFtdcMoneyType	Available;
-	///资金表占用保证金
-	TUstpFtdcMoneyType	Margin;
-	///资金表冻结的保证金
-	TUstpFtdcMoneyType	FrozenMargin;
+	///本地业务标识
+	TUstpFtdcBusinessLocalIDType	BusinessLocalID;
+	///业务发生日期
+	TUstpFtdcDateType	ActionDay;
 };
 ///报单
 struct CUstpFtdcOrderField
@@ -802,8 +756,6 @@ struct CUstpFtdcOrderField
 	TUstpFtdcInvestorIDType	InvestorID;
 	///用户代码
 	TUstpFtdcUserIDType	UserID;
-	///指定通过此席位序号下单
-	TUstpFtdcSeatNoType	SeatNo;
 	///合约代码
 	TUstpFtdcInstrumentIDType	InstrumentID;
 	///用户本地报单号
@@ -838,12 +790,14 @@ struct CUstpFtdcOrderField
 	TUstpFtdcBusinessUnitType	BusinessUnit;
 	///用户自定义域
 	TUstpFtdcCustomType	UserCustom;
+	///本地业务标识
+	TUstpFtdcBusinessLocalIDType	BusinessLocalID;
+	///业务发生日期
+	TUstpFtdcDateType	ActionDay;
 	///交易日
 	TUstpFtdcTradingDayType	TradingDay;
 	///会员编号
 	TUstpFtdcParticipantIDType	ParticipantID;
-	///最初下单用户编号
-	TUstpFtdcUserIDType	OrderUserID;
 	///客户号
 	TUstpFtdcClientIDType	ClientID;
 	///下单席位号
@@ -908,150 +862,6 @@ struct CUstpFtdcInvestorAccountDepositResField
 	TUstpFtdcMoneyType	Available;
 	///结算准备金
 	TUstpFtdcMoneyType	Balance;
-};
-///报价录入
-struct CUstpFtdcInputQuoteField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///用户代码
-	TUstpFtdcUserIDType	UserID;
-	///合约代码
-	TUstpFtdcInstrumentIDType	InstrumentID;
-	///交易系统返回的系统报价编号
-	TUstpFtdcQuoteSysIDType	QuoteSysID;
-	///用户设定的本地报价编号
-	TUstpFtdcUserQuoteLocalIDType	UserQuoteLocalID;
-	///飞马向交易系统报的本地报价编号
-	TUstpFtdcQuoteLocalIDType	QuoteLocalID;
-	///买方买入数量
-	TUstpFtdcVolumeType	BidVolume;
-	///买方开平标志
-	TUstpFtdcOffsetFlagType	BidOffsetFlag;
-	///买方投机套保标志
-	TUstpFtdcHedgeFlagType	BidHedgeFlag;
-	///买方买入价格
-	TUstpFtdcPriceType	BidPrice;
-	///卖方卖出数量
-	TUstpFtdcVolumeType	AskVolume;
-	///卖方开平标志
-	TUstpFtdcOffsetFlagType	AskOffsetFlag;
-	///卖方投机套保标志
-	TUstpFtdcHedgeFlagType	AskHedgeFlag;
-	///卖方卖出价格
-	TUstpFtdcPriceType	AskPrice;
-	///业务单元
-	TUstpFtdcBusinessUnitType	BusinessUnit;
-	///用户自定义域
-	TUstpFtdcCustomType	UserCustom;
-	///拆分出来的买方用户本地报单编号
-	TUstpFtdcUserOrderLocalIDType	BidUserOrderLocalID;
-	///拆分出来的卖方用户本地报单编号
-	TUstpFtdcUserOrderLocalIDType	AskUserOrderLocalID;
-};
-///报价通知
-struct CUstpFtdcRtnQuoteField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///用户代码
-	TUstpFtdcUserIDType	UserID;
-	///合约代码
-	TUstpFtdcInstrumentIDType	InstrumentID;
-	///交易系统返回的系统报价编号
-	TUstpFtdcQuoteSysIDType	QuoteSysID;
-	///用户设定的本地报价编号
-	TUstpFtdcUserQuoteLocalIDType	UserQuoteLocalID;
-	///飞马向交易系统报的本地报价编号
-	TUstpFtdcQuoteLocalIDType	QuoteLocalID;
-	///买方买入数量
-	TUstpFtdcVolumeType	BidVolume;
-	///买方开平标志
-	TUstpFtdcOffsetFlagType	BidOffsetFlag;
-	///买方投机套保标志
-	TUstpFtdcHedgeFlagType	BidHedgeFlag;
-	///买方买入价格
-	TUstpFtdcPriceType	BidPrice;
-	///卖方卖出数量
-	TUstpFtdcVolumeType	AskVolume;
-	///卖方开平标志
-	TUstpFtdcOffsetFlagType	AskOffsetFlag;
-	///卖方投机套保标志
-	TUstpFtdcHedgeFlagType	AskHedgeFlag;
-	///卖方卖出价格
-	TUstpFtdcPriceType	AskPrice;
-	///业务单元
-	TUstpFtdcBusinessUnitType	BusinessUnit;
-	///用户自定义域
-	TUstpFtdcCustomType	UserCustom;
-	///拆分出来的买方用户本地报单编号
-	TUstpFtdcUserOrderLocalIDType	BidUserOrderLocalID;
-	///拆分出来的卖方用户本地报单编号
-	TUstpFtdcUserOrderLocalIDType	AskUserOrderLocalID;
-	///买方系统报单编号
-	TUstpFtdcQuoteSysIDType	BidOrderSysID;
-	///卖方系统报单编号
-	TUstpFtdcQuoteSysIDType	AskOrderSysID;
-	///报价单状态
-	TUstpFtdcQuoteStatusType	QuoteStatus;
-	///插入时间
-	TUstpFtdcTimeType	InsertTime;
-	///撤销时间
-	TUstpFtdcTimeType	CancelTime;
-	///成交时间
-	TUstpFtdcTimeType	TradeTime;
-};
-///报价操作
-struct CUstpFtdcQuoteActionField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///用户代码
-	TUstpFtdcUserIDType	UserID;
-	///交易系统返回的系统报价编号
-	TUstpFtdcQuoteSysIDType	QuoteSysID;
-	///用户设定的被撤的本地报价编号
-	TUstpFtdcUserQuoteLocalIDType	UserQuoteLocalID;
-	///用户向飞马报的本地撤消报价编号
-	TUstpFtdcUserQuoteLocalIDType	UserQuoteActionLocalID;
-	///报单操作标志
-	TUstpFtdcActionFlagType	ActionFlag;
-	///业务单元
-	TUstpFtdcBusinessUnitType	BusinessUnit;
-	///用户自定义域
-	TUstpFtdcCustomType	UserCustom;
-};
-///询价请求
-struct CUstpFtdcReqForQuoteField
-{
-	///询价编号
-	TUstpFtdcQuoteSysIDType	ReqForQuoteID;
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///用户代码
-	TUstpFtdcUserIDType	UserID;
-	///合约代码
-	TUstpFtdcInstrumentIDType	InstrumentID;
-	///交易日
-	TUstpFtdcDateType	TradingDay;
-	///询价时间
-	TUstpFtdcTimeType	ReqForQuoteTime;
 };
 ///行情基础属性
 struct CUstpFtdcMarketDataBaseField
@@ -1172,6 +982,8 @@ struct CUstpFtdcMarketDataUpdateTimeField
 	TUstpFtdcTimeType	UpdateTime;
 	///最后修改毫秒
 	TUstpFtdcMillisecType	UpdateMillisec;
+	///业务发生日期
+	TUstpFtdcDateType	ActionDay;
 };
 ///深度行情
 struct CUstpFtdcDepthMarketDataField
@@ -1260,6 +1072,8 @@ struct CUstpFtdcDepthMarketDataField
 	TUstpFtdcTimeType	UpdateTime;
 	///最后修改毫秒
 	TUstpFtdcMillisecType	UpdateMillisec;
+	///业务发生日期
+	TUstpFtdcDateType	ActionDay;
 };
 ///订阅合约的相关信息
 struct CUstpFtdcSpecificInstrumentField
@@ -1267,129 +1081,11 @@ struct CUstpFtdcSpecificInstrumentField
 	///合约代码
 	TUstpFtdcInstrumentIDType	InstrumentID;
 };
-///申请组合
-struct CUstpFtdcInputMarginCombActionField
+///多播通道心跳
+struct CUstpFtdcMultiChannelHeartBeatField
 {
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///交易用户代码
-	TUstpFtdcUserIDType	UserID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///投机套保标志
-	TUstpFtdcHedgeFlagType	HedgeFlag;
-	///用户本地编号
-	TUstpFtdcUserOrderLocalIDType	UserActionLocalID;
-	///组合合约代码
-	TUstpFtdcInstrumentIDType	CombInstrumentID;
-	///组合数量
-	TUstpFtdcVolumeType	CombVolume;
-	///组合动作方向
-	TUstpFtdcCombDirectionType	CombDirection;
-	///本地编号
-	TUstpFtdcOrderLocalIDType	ActionLocalID;
-};
-///交易编码组合持仓查询
-struct CUstpFtdcQryInvestorCombPositionField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///投机套保标志
-	TUstpFtdcHedgeFlagType	HedgeFlag;
-	///组合合约代码
-	TUstpFtdcInstrumentIDType	CombInstrumentID;
-};
-///交易编码组合持仓查询应答
-struct CUstpFtdcRspInvestorCombPositionField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///投机套保标志
-	TUstpFtdcHedgeFlagType	HedgeFlag;
-	///客户代码
-	TUstpFtdcClientIDType	ClientID;
-	///组合合约代码
-	TUstpFtdcInstrumentIDType	CombInstrumentID;
-	///组合持仓
-	TUstpFtdcVolumeType	CombPosition;
-	///冻结组合持仓
-	TUstpFtdcVolumeType	CombFrozenPosition;
-	///组合一手释放的保证金
-	TUstpFtdcMoneyType	CombFreeMargin;
-};
-///组合规则
-struct CUstpFtdcMarginCombinationLegField
-{
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///组合合约代码
-	TUstpFtdcInstrumentIDType	CombInstrumentID;
-	///单腿编号
-	TUstpFtdcLegIDType	LegID;
-	///单腿合约代码
-	TUstpFtdcInstrumentIDType	LegInstrumentID;
-	///买卖方向
-	TUstpFtdcDirectionType	Direction;
-	///单腿乘数
-	TUstpFtdcLegMultipleType	LegMultiple;
-	///优先级
-	TUstpFtdcPriorityType	Priority;
-};
-///交易编码单腿持仓查询
-struct CUstpFtdcQryInvestorLegPositionField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///投机套保标志
-	TUstpFtdcHedgeFlagType	HedgeFlag;
-	///单腿合约代码
-	TUstpFtdcInstrumentIDType	LegInstrumentID;
-};
-///交易编码单腿持仓查询应答
-struct CUstpFtdcRspInvestorLegPositionField
-{
-	///经纪公司编号
-	TUstpFtdcBrokerIDType	BrokerID;
-	///交易所代码
-	TUstpFtdcExchangeIDType	ExchangeID;
-	///投资者编号
-	TUstpFtdcInvestorIDType	InvestorID;
-	///投机套保标志
-	TUstpFtdcHedgeFlagType	HedgeFlag;
-	///客户代码
-	TUstpFtdcClientIDType	ClientID;
-	///单腿合约代码
-	TUstpFtdcInstrumentIDType	InstrumentID;
-	///多头持仓
-	TUstpFtdcVolumeType	LongPosition;
-	///空头持仓
-	TUstpFtdcVolumeType	ShortPosition;
-	///多头占用保证金
-	TUstpFtdcMoneyType	LongMargin;
-	///空头占用保证金
-	TUstpFtdcMoneyType	ShortMargin;
-	///多头冻结持仓
-	TUstpFtdcVolumeType	LongFrozenPosition;
-	///空头冻结持仓
-	TUstpFtdcVolumeType	ShortFrozenPosition;
-	///多头冻结保证金
-	TUstpFtdcMoneyType	LongFrozenMargin;
-	///空头冻结保证金
-	TUstpFtdcMoneyType	ShortFrozenMargin;
+	///心跳超时时间（秒）
+	TUstpFtdcVolumeType	UstpMultiChannelHeartBeatTimeOut;
 };
 
 
