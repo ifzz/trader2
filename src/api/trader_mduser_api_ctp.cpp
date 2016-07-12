@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ctp/ThostFtdcUserApiDataType.h"
-#include "ctp/ThostFtdcMdApi.h"
+#include "ThostFtdcUserApiDataType.h"
+#include "ThostFtdcMdApi.h"
 
-#include "wrap/CtpMduserHandler.h"
+#include "CtpMduserHandler.h"
 
 
 #ifdef __cplusplus

@@ -1,19 +1,19 @@
 noinst_LIBRARIES=libmduserapi.a libtraderapi.a
 noinst_PROGRAMS=libltsmduser.so libltstrader.so libctpmduser.so libctptrader.so libfemasmduser.so libfemastrader.so 
-AM_CPPFLAGS = -I$(top_srcdir)/libevent -I$(top_srcdir)/libevent/compat/sys -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/libevent -I$(top_srcdir)/libevent/compat/sys -I$(top_srcdir)/src -I$(top_srcdir)/src/util
 AM_CPPFLAGS +=  -I$(top_srcdir)/lts -I$(top_srcdir)/ctp -I$(top_srcdir)/femas -I$(top_srcdir)/src/wrap -fPIC
 libmduserapi_a_SOURCES=trader_mduser_api.c
 libtraderapi_a_SOURCES=trader_trader_api.c
 
-libltsmduser_so_SOURCES=trader_mduser_api_lts.cpp
+libltsmduser_so_SOURCES=LtsMduserHandler.cpp trader_mduser_api_lts.cpp
 libltsmduser_so_LDFLAGS = -shared
-libltstrader_so_SOURCES=trader_trader_api_lts.cpp
+libltstrader_so_SOURCES=LtsTraderHandler.cpp trader_trader_api_lts.cpp
 libltstrader_so_LDFLAGS = -shared
-libctpmduser_so_SOURCES=trader_mduser_api_ctp.cpp
+libctpmduser_so_SOURCES=CtpMduserHandler.cpp trader_mduser_api_ctp.cpp
 libctpmduser_so_LDFLAGS = -shared
-libctptrader_so_SOURCES=trader_trader_api_ctp.cpp
+libctptrader_so_SOURCES=CtpTraderHandler.cpp trader_trader_api_ctp.cpp
 libctptrader_so_LDFLAGS = -shared
-libfemasmduser_so_SOURCES=trader_mduser_api_femas.cpp
+libfemasmduser_so_SOURCES=FemasMduserHandler.cpp trader_mduser_api_femas.cpp
 libfemasmduser_so_LDFLAGS = -shared
-libfemastrader_so_SOURCES=trader_trader_api_femas.cpp
+libfemastrader_so_SOURCES=FemasTraderHandler.cpp trader_trader_api_femas.cpp
 libfemastrader_so_LDFLAGS = -shared
