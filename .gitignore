@@ -54,3 +54,7 @@ configure.ac
 sqlite3
 stamp-h1
 
+#project tmp files
+*.con
+trader_mduser_test
+trader_trader_test
