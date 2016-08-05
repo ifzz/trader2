@@ -1,2 +1,2 @@
 AUTOMAKE_OPTIONS=foreign
-SUBDIRS=util cfg log wrap api test svc
+SUBDIRS=util cfg log api test svc
