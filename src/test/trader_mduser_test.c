@@ -14,7 +14,7 @@
 #include "trader_data.h"
 #include "trader_mduser_api.h"
 
-#define FEMAS // FEMAS LTS CTP
+#define CTP // FEMAS LTS CTP
 
 typedef struct trader_mduser_test_def trader_mduser_test;
 struct trader_mduser_test_def {
@@ -106,7 +106,15 @@ void test_stdin_read_cb(struct bufferevent *bev, void *arg)
       test->pApi->pMethod->xLogout(test->pApi);
       break;
     case '2':
+#ifdef CTP
+      test->pApi->pMethod->xSubscribe(test->pApi, "rb1610");
+#endif
+#ifdef LTS
       test->pApi->pMethod->xSubscribe(test->pApi, "11000942");
+#endif
+#ifdef FEMAS
+      test->pApi->pMethod->xSubscribe(test->pApi, "IF1608");
+#endif
       break;
     case '8':
       event_base_loopexit(test->pBase, &tv);
@@ -217,10 +225,8 @@ int main(int argc, char* argv[])
   //FEMAS
 #include "trader_mduser_api_femas.h"
   test->pApi = trader_mduser_api_new(pair[1], trader_mduser_api_femas_method_get());
-  //test->pApi->pMethod->xSetUser(test->pApi, "0162", "9901540501", "282038");
-  //test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://118.126.16.229:17101");
-  test->pApi->pMethod->xSetUser(test->pApi, "0177", "00007870", "123456");
-  test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://117.185.125.9:6888");
+  test->pApi->pMethod->xSetUser(test->pApi, "0162", "9901540501", "282038");
+  test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://118.126.16.227:17101");
 #endif
   
   test->pApi->pMethod->xSetWorkspace(test->pApi, ".");
