@@ -121,7 +121,7 @@ void trader_mduser_api_femas_login(trader_mduser_api* self)
   // login
   CUstpFtdcReqUserLoginField reqUserLogin;
   memset(&reqUserLogin, 0, sizeof(reqUserLogin));
-  //strcpy(reqUserLogin.TradingDay, pUserApi->GetTradingDay());
+  strcpy(reqUserLogin.TradingDay, pUserApi->GetTradingDay());
   strcpy(reqUserLogin.BrokerID, self->pBrokerID);
   strcpy(reqUserLogin.UserID, self->pUser);
   strcpy(reqUserLogin.Password,self->pPwd);
