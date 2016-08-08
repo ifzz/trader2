@@ -332,6 +332,12 @@ void ctp_trader_on_rsp_user_login(void* arg, CThostFtdcRspUserLoginField *pRspUs
     errMsg = pRspInfo->ErrorMsg;
   }
   
+  trader_trader_api_on_rsp_user_login(self, errNo, errMsg);
+
+  if(errNo){
+    return;
+  }
+  
   CThostFtdcSettlementInfoConfirmField req;
   memset(&req, 0, sizeof(CThostFtdcSettlementInfoConfirmField));
 
@@ -342,7 +348,6 @@ void ctp_trader_on_rsp_user_login(void* arg, CThostFtdcRspUserLoginField *pRspUs
   
   pTraderApi->ReqSettlementInfoConfirm(&req, pImp->nTraderRequestID++);
   
-  trader_trader_api_on_rsp_user_login(self, errNo, errMsg);
 }
 
 void ctp_trader_on_rsp_user_logout(void* arg, CThostFtdcUserLogoutField *pRspUserLogout, CThostFtdcRspInfoField *pRspInfo, int nRequestID, int bIsLast)

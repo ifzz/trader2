@@ -15,6 +15,8 @@
 #include "trader_trader_api.h"
 #include "trader_trader_api_lts.h"
 
+#define CTP // FEMAS LTS CTP
+
 typedef struct trader_trader_test_def trader_trader_test;
 struct trader_trader_test_def {
 
@@ -105,15 +107,41 @@ void test_stdin_read_cb(struct bufferevent *bev, void *arg)
       test->pApi->pMethod->xLogout(test->pApi);
       break;
     case '2':
+#ifdef CTP
+      test->pApi->pMethod->xOrderInsert(test->pApi, "rb1610", "1", 
+        '0',/*SECURITY_FTDC_D_Buy*/
+        '0',/*SECURITY_FTDC_OF_Open*/
+        0.2824f,
+        1
+      );
+#endif
+#ifdef LTS
       test->pApi->pMethod->xOrderInsert(test->pApi, "11000942", "1", 
         '0',/*SECURITY_FTDC_D_Buy*/
         '0',/*SECURITY_FTDC_OF_Open*/
         0.2824f,
         1
       );
+#endif
+#ifdef FEMAS
+      test->pApi->pMethod->xOrderInsert(test->pApi, "IF1608", "1", 
+        '0',/*SECURITY_FTDC_D_Buy*/
+        '0',/*SECURITY_FTDC_OF_Open*/
+        0.2824f,
+        1
+      );
+#endif
       break;
     case '3':
+#ifdef CTP
+      test->pApi->pMethod->xOrderAction(test->pApi, "rb1610", "2", "1", "1");
+#endif
+#ifdef LTS
       test->pApi->pMethod->xOrderAction(test->pApi, "11000942", "2", "1", "1");
+#endif
+#ifdef FEMAS
+      test->pApi->pMethod->xOrderAction(test->pApi, "IF1608", "2", "1", "1");
+#endif
       break;
     case '4':
       test->pApi->pMethod->xQryInstrument(test->pApi);
@@ -230,13 +258,30 @@ int main(int argc, char* argv[])
     NULL, test_stdin_evt_cb, (void*)test);
   bufferevent_enable(test->pBufStdin, EV_READ|EV_PERSIST);
 
-  test->pApi = trader_trader_api_new(pair[1], trader_trader_api_lts_method_get());
-
   //ÉèÖÃ²ÎÊý
-
-  test->pApi->pMethod->xSetUser(test->pApi, "2011", "130000005572", "7024211");
-
-  test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://116.228.234.66:34505|tcp://116.228.234.66:34506");
+#ifdef LTS
+    //LTS
+#include "trader_trader_api_lts.h"
+    test->pApi = trader_trader_api_new(pair[1], trader_trader_api_lts_method_get());
+    test->pApi->pMethod->xSetUser(test->pApi, "2011", "130000005572", "7024211");
+    test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://116.228.234.66:34505|tcp://116.228.234.66:34506");
+#endif
+  
+#ifdef CTP
+    //CTP
+#include "trader_trader_api_ctp.h"
+    test->pApi = trader_trader_api_new(pair[1], trader_trader_api_ctp_method_get());
+    test->pApi->pMethod->xSetUser(test->pApi, "9999", "033098", "282038");
+    test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://180.168.146.187:10000");
+#endif
+  
+#ifdef FEMAS
+    //FEMAS
+#include "trader_trader_api_femas.h"
+    test->pApi = trader_trader_api_new(pair[1], trader_trader_api_femas_method_get());
+    test->pApi->pMethod->xSetUser(test->pApi, "0162", "9901540501", "282038");
+    test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://118.126.16.227:17041");
+#endif
   
   test->pApi->pMethod->xSetWorkspace(test->pApi, ".");
   
