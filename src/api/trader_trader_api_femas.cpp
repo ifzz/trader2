@@ -95,6 +95,11 @@ void trader_trader_api_femas_start(trader_trader_api* self)
   // 交易
   pTraderApi->RegisterSpi(pTraderHandler);
   pTraderApi->RegisterFront(self->pAddress);
+
+  
+  pTraderApi->SubscribePrivateTopic(USTP_TERT_RESUME);
+
+  pTraderApi->SubscribePublicTopic(USTP_TERT_RESUME);
   
   // 连接交易服务器
   pTraderApi->Init();
