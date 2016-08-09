@@ -14,7 +14,7 @@
 #include "trader_data.h"
 #include "trader_mduser_api.h"
 
-#define CTP // FEMAS LTS CTP
+#define FEMAS // FEMAS LTS CTP
 
 typedef struct trader_mduser_test_def trader_mduser_test;
 struct trader_mduser_test_def {
@@ -229,7 +229,7 @@ int main(int argc, char* argv[])
   test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://118.126.16.227:17101");
 #endif
   
-  test->pApi->pMethod->xSetWorkspace(test->pApi, ".");
+  test->pApi->pMethod->xSetWorkspace(test->pApi, "./");
   
   test->pApi->pMethod->xStart(test->pApi);
 

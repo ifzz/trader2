@@ -15,7 +15,7 @@
 #include "trader_trader_api.h"
 #include "trader_trader_api_lts.h"
 
-#define CTP // FEMAS LTS CTP
+#define FEMAS // FEMAS LTS CTP
 
 typedef struct trader_trader_test_def trader_trader_test;
 struct trader_trader_test_def {

@@ -91,8 +91,8 @@ void trader_mduser_api_femas_start(trader_mduser_api* self)
   // connect
   pUserApi->RegisterSpi(pHandler);
   
-  pUserApi->SubscribeMarketDataTopic (101, USTP_TERT_RESUME);
-  pUserApi->SubscribeMarketDataTopic (110, USTP_TERT_RESTART);
+  pUserApi->SubscribeMarketDataTopic (100, USTP_TERT_RESUME);
+  //pUserApi->SubscribeMarketDataTopic (110, USTP_TERT_RESTART);
   
   //pUserApi->SubscribeMarketDataTopic(self->TopicId, USTP_TERT_QUICK);
   pUserApi->RegisterFront(self->pAddress);
