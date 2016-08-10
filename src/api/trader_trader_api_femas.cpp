@@ -502,6 +502,7 @@ femas_trader_api_cb* femas_trader_api_cb_get()
 void femas_query_on_rsp_qry_investor(void* arg, CUstpFtdcRspUserInvestorField *pInvestor, CUstpFtdcRspInfoField *pRspInfo, int nRequestID, int bIsLast)
 {
   trader_trader_api* self = (trader_trader_api*)arg;
+  trader_trader_api_femas* pImp = (trader_trader_api_femas*)self->pUserApi;
   int errNo = 0;
   char* errMsg = NULL;
   char* investor = NULL;
@@ -512,6 +513,7 @@ void femas_query_on_rsp_qry_investor(void* arg, CUstpFtdcRspUserInvestorField *p
 
   if(pInvestor) {
     investor = pInvestor->InvestorID;
+    strncpy(pImp->sInvestorID, pInvestor->InvestorID, sizeof(pImp->sInvestorID));
   }
   
   trader_trader_api_on_rsp_qry_user_investor(self, investor, errNo, errMsg);
