@@ -187,7 +187,7 @@ int trader_trader_api_femas_order_insert(trader_trader_api* self, char* inst, ch
 	///数量
 	inputOrderField.Volume= vol;
 	///有效期类型
-	inputOrderField.TimeCondition = USTP_FTDC_TC_GFS;
+	inputOrderField.TimeCondition = USTP_FTDC_TC_GFD;
 	///成交量类型
 	inputOrderField.VolumeCondition = USTP_FTDC_VC_AV;
 	///最小成交量
