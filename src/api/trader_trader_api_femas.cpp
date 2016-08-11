@@ -537,6 +537,9 @@ void femas_query_on_rsp_qry_instrument(void* arg, CUstpFtdcRspInstrumentField *p
   if(pInstrument) {
     strcpy(traderInstrument.InstrumentID, pInstrument->InstrumentID);
     //TODO
+    traderInstrument.PriceTick = pInstrument->PriceTick;
+    traderInstrument.VolumeMultiple = pInstrument->VolumeMultiple;
+    
   }
 
   trader_trader_api_on_rsp_qry_instrument(self, &traderInstrument, errNo, errMsg, bIsLast);

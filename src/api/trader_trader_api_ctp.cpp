@@ -554,6 +554,7 @@ void ctp_query_on_rsp_qry_instrument(void* arg, CThostFtdcInstrumentField *pInst
   if(pInstrument) {
     strcpy(traderInstrument.InstrumentID, pInstrument->InstrumentID);
     //TODO
+    traderInstrument.PriceTick = pInstrument->PriceTick;
   }
 
   trader_trader_api_on_rsp_qry_instrument(self, &traderInstrument, errNo, errMsg, bIsLast);
