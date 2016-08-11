@@ -127,7 +127,7 @@ void test_stdin_read_cb(struct bufferevent *bev, void *arg)
       test->pApi->pMethod->xOrderInsert(test->pApi, "IF1608", "1", 
         '0',/*SECURITY_FTDC_D_Buy*/
         '0',/*SECURITY_FTDC_OF_Open*/
-        0.2824f,
+        3230,
         1
       );
 #endif
