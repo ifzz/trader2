@@ -14,7 +14,8 @@ static trader_mduser_client_method* trader_mduser_client_method_get();
 static int trader_mduser_client_init(trader_mduser_client* self, struct event_base* base, char* ip, int port,
                                         trader_mduser_client_connect_callback connect_cb,
                                         trader_mduser_client_disconnect_callback disconnect_cb,
-                                        trader_mduser_client_recv_callback recv_data_cb);
+                                        trader_mduser_client_recv_callback recv_data_cb,
+                                        void* user_data);
 static int trader_mduser_client_connect(trader_mduser_client* self);
 static int trader_mduser_client_on_event(trader_mduser_client* self);
 static int trader_mduser_client_on_recv(trader_mduser_client* self);
@@ -62,14 +63,14 @@ int trader_mduser_client_connect(trader_mduser_client* self)
   sin.sin_addr.s_addr = inet_addr(self->ip);
   sin.sin_port = htons(self->port);
   
-	self->bev = bufferevent_socket_new(self->base, -1,
+  self->bev = bufferevent_socket_new(self->base, -1,
 		BEV_OPT_CLOSE_ON_FREE | BEV_OPT_DEFER_CALLBACKS);
 
-  bufferevent_setcb(self->bev, reader_readcb, NULL, reader_eventcb, (void*)self);
+  bufferevent_setcb(self->bev, trader_mduser_client_read_cb, NULL, trader_mduser_client_evt_cb, (void*)self);
   
-	bufferevent_enable(self->bev, EV_READ);
+  bufferevent_enable(self->bev, EV_READ);
 
-  bufferevent_socket_connect(self->bev, &sin, sizeof(sin));
+  bufferevent_socket_connect(self->bev, (struct sockaddr*)&sin, sizeof(sin));
 
   return 0;
 

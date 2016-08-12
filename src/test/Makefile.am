@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -I$(top_srcdir)/libevent -I$(top_srcdir)/libevent/compat/sys -I$(top_srcdir)/src -I$(top_srcdir)/src/api -I$(top_srcdir)/src/svc
 
-bin_PROGRAMS= trader_mduser_test trader_trader_test test_mduser_boardcast
+bin_PROGRAMS= trader_mduser_test trader_trader_test test_mduser_boardcast test_mduser_client
 
 trader_mduser_test_SOURCES=trader_mduser_test.c
 trader_mduser_test_LDADD=-L$(top_srcdir)/libevent -L$(top_srcdir)/src/log -L$(top_srcdir)/src/util
@@ -29,3 +29,8 @@ test_mduser_boardcast_SOURCES=trader_mduser_boardcast_test.c
 test_mduser_boardcast_SOURCES+=../svc/trader_mduser_boardcast.c
 test_mduser_boardcast_LDADD=-L$(top_srcdir)/libevent 
 test_mduser_boardcast_LDADD+=-levent_core -lstdc++ -lpthread 
+
+test_mduser_client_SOURCES=trader_mduser_client_test.c
+test_mduser_client_SOURCES+=../svc/trader_mduser_client.c
+test_mduser_client_LDADD=-L$(top_srcdir)/libevent 
+test_mduser_client_LDADD+=-levent_core -lstdc++ -lpthread 

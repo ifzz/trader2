@@ -9,9 +9,9 @@
 typedef struct trader_mduser_client_def trader_mduser_client;
 typedef struct trader_mduser_client_method_def trader_mduser_client_method;
 
-typedef void trader_mduser_client_connect_callback(void* user_data);
-typedef void trader_mduser_client_disconnect_callback(void* user_data);
-typedef void trader_mduser_client_recv_callback(void* user_data, void* data, int len);
+typedef void (*trader_mduser_client_connect_callback)(void* user_data);
+typedef void (*trader_mduser_client_disconnect_callback)(void* user_data);
+typedef void (*trader_mduser_client_recv_callback)(void* user_data, void* data, int len);
 
 struct trader_mduser_client_def {
   

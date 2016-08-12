@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <unistd.h>
+#include <signal.h>
+
+#include <sys/time.h>
+
 #include <event2/bufferevent.h>
 #include <event2/util.h>
 #include <event2/event.h>
