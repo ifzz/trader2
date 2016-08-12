@@ -3,7 +3,6 @@
 #define _TRADER_MDUSER_BOARDCAST_H_
 
 #include <event2/bufferevent.h>
-#include <event2/buffer.h>
 #include <event2/listener.h>
 #include <event2/util.h>
 #include <event2/event.h>
@@ -17,11 +16,9 @@ typedef struct trader_mduser_boardcast_method_def trader_mduser_boardcast_method
 struct trader_mduser_cnn_def {
   TAILQ_ENTRY(trader_mduser_cnn_def) next;
   
-  // 对交易进程
   struct bufferevent *be;
 
   trader_mduser_boardcast* parent;
-  
 };
 
 
