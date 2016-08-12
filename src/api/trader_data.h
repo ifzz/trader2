@@ -1,6 +1,8 @@
 #ifndef _TRADER_DATA_H_
 #define _TRADER_DATA_H_
 
+typedef char trader_instrument_id_type[31];
+
 typedef struct trader_tick_def trader_tick;
 typedef struct trader_order_def trader_order;
 typedef struct trader_trade_def trader_trade;
