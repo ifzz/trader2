@@ -48,7 +48,10 @@ void boardcast_test_timer_cb(evutil_socket_t fd, short event, void *arg)
   trader_mduser_boardcast_test* test = (trader_mduser_boardcast_test*)arg;
 
   test->pApi->method->xBoardcase(test->pApi, "0000", 4);
-  
+  struct timeval tv;
+  tv.tv_usec = 0;
+  tv.tv_sec = 5;
+  evtimer_add(test->pTimer, &tv);
 }
 
 

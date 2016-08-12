@@ -55,7 +55,7 @@ int trader_mduser_boardcast_init(trader_mduser_boardcast* self, struct event_bas
   sin.sin_addr.s_addr = inet_addr(self->ip);
   sin.sin_port = htons(self->port);
 
-  self->pListener = evconnlistener_new_bind(self->pBase, trader_mduser_boardcast_listener_cb, (void *)self,
+  self->listener = evconnlistener_new_bind(self->base, trader_mduser_boardcast_listener_cb, (void *)self,
     LEV_OPT_REUSEABLE|LEV_OPT_CLOSE_ON_FREE, -1,
     (struct sockaddr*)&sin,
     sizeof(sin));
@@ -68,7 +68,7 @@ int trader_mduser_boardcast_accept(trader_mduser_boardcast* self, evutil_socket_
   trader_mduser_cnn* cnn = (trader_mduser_cnn*)malloc(sizeof(trader_mduser_cnn));
 
   cnn->parent = self;
-  cnn->be = bufferevent_socket_new(self->pBase, fd, BEV_OPT_CLOSE_ON_FREE);
+  cnn->be = bufferevent_socket_new(self->base, fd, BEV_OPT_CLOSE_ON_FREE);
   
   bufferevent_setcb(cnn->be, trader_mduser_boardcast_read_cb, 
     trader_mduser_boardcast_write_cb, trader_mduser_boardcast_evt_cb, (void*)cnn);
