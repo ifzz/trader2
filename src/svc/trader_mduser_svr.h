@@ -2,12 +2,15 @@
 #ifndef _TRADER_MDUSER_SVR_H_
 #define _TRADER_MDUSER_SVR_H_
 
+#include <event2/util.h>
+#include <event2/event.h>
+#include <event2/bufferevent.h>
+
 #include "trader_data.h"
 
 #include "trader_mduser_cnn.h"
-
+#include "trader_mduser_boardcast.h"
 #include "hiredis.h"
-
 
 typedef struct trader_mduser_svr_def trader_mduser_svr;
 typedef struct trader_mduser_svr_method_def trader_mduser_svr_method;
