@@ -16,7 +16,7 @@ static trader_mduser_boardcast_method* trader_mduser_boardcast_method_get();
 
 static int trader_mduser_boardcast_init(trader_mduser_boardcast* self, struct event_base* base, char* ip, int port);
 static int trader_mduser_boardcast_accept(trader_mduser_boardcast* self, evutil_socket_t fd);
-static int trader_mduser_boardcast_on_cnn_event(trader_mduser_boardcast* self, trader_mduser_cnn* cnn);
+static int trader_mduser_boardcast_on_cnn_event(trader_mduser_boardcast* self, trader_mduser_boardcast_cnn* cnn);
 static int trader_mduser_boardcast_boardcase(trader_mduser_boardcast* self, char* buff, int len);
 static int trader_mduser_boardcast_exit(trader_mduser_boardcast* self);
 
@@ -65,7 +65,7 @@ int trader_mduser_boardcast_init(trader_mduser_boardcast* self, struct event_bas
 
 int trader_mduser_boardcast_accept(trader_mduser_boardcast* self, evutil_socket_t fd)
 {
-  trader_mduser_cnn* cnn = (trader_mduser_cnn*)malloc(sizeof(trader_mduser_cnn));
+  trader_mduser_boardcast_cnn* cnn = (trader_mduser_boardcast_cnn*)malloc(sizeof(trader_mduser_boardcast_cnn));
 
   cnn->parent = self;
   cnn->be = bufferevent_socket_new(self->base, fd, BEV_OPT_CLOSE_ON_FREE);
@@ -79,7 +79,7 @@ int trader_mduser_boardcast_accept(trader_mduser_boardcast* self, evutil_socket_
   return 0;
 }
 
-int trader_mduser_boardcast_on_cnn_event(trader_mduser_boardcast* self, trader_mduser_cnn* cnn)
+int trader_mduser_boardcast_on_cnn_event(trader_mduser_boardcast* self, trader_mduser_boardcast_cnn* cnn)
 {
   TAILQ_REMOVE(&self->cnnList, cnn, next);
   bufferevent_free(cnn->be);
@@ -89,7 +89,7 @@ int trader_mduser_boardcast_on_cnn_event(trader_mduser_boardcast* self, trader_m
 
 int trader_mduser_boardcast_boardcase(trader_mduser_boardcast* self, char* buff, int len)
 {
-  trader_mduser_cnn* cnn;
+  trader_mduser_boardcast_cnn* cnn;
 
   TAILQ_FOREACH(cnn, &self->cnnList, next) {
     bufferevent_write(cnn->be, buff, len);
@@ -99,7 +99,7 @@ int trader_mduser_boardcast_boardcase(trader_mduser_boardcast* self, char* buff,
 
 int trader_mduser_boardcast_exit(trader_mduser_boardcast* self)
 {
-  trader_mduser_cnn* cnn;
+  trader_mduser_boardcast_cnn* cnn;
   while((cnn = TAILQ_FIRST(&self->cnnList))!=NULL){
   	TAILQ_REMOVE(&self->cnnList, cnn, next);
     if(cnn->be){
@@ -133,7 +133,7 @@ void trader_mduser_boardcast_write_cb(struct bufferevent *bev, void *arg)
 
 void trader_mduser_boardcast_evt_cb(struct bufferevent *bev, short event, void *arg)
 {
-  trader_mduser_cnn* cnn = (trader_mduser_cnn*)arg;
+  trader_mduser_boardcast_cnn* cnn = (trader_mduser_boardcast_cnn*)arg;
 
   trader_mduser_boardcast* self = cnn->parent;
 
