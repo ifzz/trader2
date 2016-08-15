@@ -13,6 +13,9 @@
 #include <event2/event.h>
 #include <event2/buffer.h>
 
+#include "trader_data.h"
+#include "trader_mduser_api.h"
+
 #include "trader_mduser_client.h"
 
 typedef struct trader_mduser_client_test_def trader_mduser_client_test;
@@ -56,7 +59,12 @@ void trader_mduser_client_test_disconnect_callback(void* user_data)
 
 void trader_mduser_client_test_recv_callback(void* user_data, void* data, int len)
 {
-  printf("recv[%d][%s]\n", len, (char*)data);
+  trader_mduser_evt* pEvt = (trader_mduser_evt*)data;
+
+  trader_tick* tick_data = &pEvt->Tick;
+  
+  printf("tick[%s]UpdateTime[%s]UpdateMillisec[%d]\n", tick_data->InstrumentID, tick_data->UpdateTime, tick_data->UpdateMillisec);
+  
 }
 
 
