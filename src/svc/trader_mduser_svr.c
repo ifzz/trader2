@@ -51,7 +51,7 @@ static int trader_mduser_svr_init_cnn(trader_mduser_svr* self);
 static int trader_mduser_svr_init_boardcast(trader_mduser_svr* self);
 static int trader_mduser_svr_init_instruments(trader_mduser_svr* self);
 
-static int trader_mduser_svr_redis_get(trader_mduser_svr* self const char* key, char* val, int size);
+static int trader_mduser_svr_redis_get(trader_mduser_svr* self, const char* key, char* val, int size);
 
 trader_mduser_svr_method* trader_mduser_svr_method_get()
 {
@@ -201,9 +201,9 @@ int trader_mduser_svr_init(trader_mduser_svr* self)
 
   CMN_DEBUG("self->pRedisCtx\n");
   struct timeval tv = {
-    5, 0;
+    5, 0
   };
-  self->pRedisCtx = redisConnectWithTimeout("localhost", 6379, &tv);
+  self->pRedisCtx = redisConnectWithTimeout("localhost", 6379, tv);
   CMN_ASSERT(self->pRedisCtx);
 
   CMN_ASSERT(0 == self->pRedisCtx->err);
