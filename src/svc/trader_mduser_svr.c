@@ -310,6 +310,14 @@ void trader_mduser_svr_free(trader_mduser_svr* self)
 
 int main(int argc, char* argv[])
 {
+  trader_mduser_svr* svc = trader_mduser_svr_new();
+
+  svc->pMethod->xInit(svc);
+
+  svc->pMethod->xRun(svc);
+
+  trader_mduser_svr_free(svc);
+
   return 0;
 }
 
