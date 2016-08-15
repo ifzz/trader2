@@ -51,7 +51,12 @@ static int trader_mduser_svr_init_cnn(trader_mduser_svr* self);
 static int trader_mduser_svr_init_boardcast(trader_mduser_svr* self);
 static int trader_mduser_svr_init_instruments(trader_mduser_svr* self);
 
+
 static int trader_mduser_svr_redis_get(trader_mduser_svr* self, const char* key, char* val, int size);
+
+static int trader_mduser_svr_instrument_sort(trader_mduser_svr* self);
+
+static void* trader_mduser_svr_instrument_bsearch(trader_mduser_svr* self, char* inst);
 
 trader_mduser_svr_method* trader_mduser_svr_method_get()
 {
@@ -139,10 +144,14 @@ int trader_mduser_svr_init_instruments(trader_mduser_svr* self)
       nRet = 0;
       self->instrumentNumber = reply->elements;
       self->instruments = (trader_instrument_id_type*)malloc(self->instrumentNumber * sizeof(trader_instrument_id_type));
+      self->ticks = (trader_tick*)malloc(self->instrumentNumber * sizeof(trader_tick));
       for(i = 0; i < self->instrumentNumber; i++){
         r = reply->element[i];
         strncpy(self->instruments[i], r->str, sizeof(trader_instrument_id_type));
+        memset(&self->ticks[i], 0, sizeof(trader_tick));
+        strncpy(self->ticks[i].InstrumentID, r->str, sizeof(trader_instrument_id_type));
       }
+      trader_mduser_svr_instrument_sort(self);
       break;
     }
   }while(0);
@@ -150,6 +159,53 @@ int trader_mduser_svr_init_instruments(trader_mduser_svr* self)
 
   return nRet;
 }
+
+int trader_mduser_svr_instrument_sort(trader_mduser_svr* self)
+{
+  int i;
+  int j;
+  int c;
+
+  trader_instrument_id_type tmp; 
+
+  for(i = 0; i < self->instrumentNumber; i++){
+    for(j = i; j < self->instrumentNumber; j++){
+      c = strcmp(self->ticks[i].InstrumentID, self->ticks[j].InstrumentID);
+      if(c > 0){
+        strcpy(tmp, self->ticks[i].InstrumentID);
+        strcpy(self->ticks[i].InstrumentID, self->ticks[j].InstrumentID);
+        strcpy(self->ticks[j].InstrumentID, tmp);
+      }
+    }
+  }
+  return 0;
+}
+
+void* trader_mduser_svr_instrument_bsearch(trader_mduser_svr* self, char* key)
+{
+  int h;
+  int l;
+  int m;
+  int c;
+  h = self->instrumentNumber - 1;
+  l = 0;
+  m = self->instrumentNumber / 2;
+
+  while (l <= h) {
+    m = (l + h) / 2;
+
+    c = strcmp(self->ticks[m].InstrumentID, key);
+    if(0 == c){
+      return (void*)&self->ticks[m];
+    }else if(c > 0) {
+      h = m - 1;
+    }else{
+      l = m + 1;
+    }
+  }
+  return (void*)NULL;
+}
+
 
 int trader_mduser_svr_redis_get(trader_mduser_svr* self, const char* key, char* val, int size)
 {
@@ -239,13 +295,28 @@ int trader_mduser_svr_run(trader_mduser_svr* self)
   self->pCnnBackup->pMethod->xStop(self->pCnnBackup);
   
   self->pBoardcast->method->xExit(self->pBoardcast);
+
+  redisFree(self->pRedisCtx);
   
   return 0;
 }
 
 int  trader_mduser_svr_proc(trader_mduser_svr* self, trader_mduser_evt* evt)
 {
-  self->pBoardcast->method->xBoardcase(self->pBoardcast, (char*)evt, sizeof(trader_mduser_evt));
+  trader_tick* current;
+  trader_tick* tick;
+  
+  current = (trader_tick*)trader_mduser_svr_instrument_bsearch(self, evt->Tick.InstrumentID);
+  if(NULL == current){
+    return -1;
+  }
+
+  tick = &evt->Tick;
+  if(0 != strcmp(current->UpdateTime, tick->UpdateTime)
+  || (current->UpdateMillisec != tick->UpdateMillisec)){
+    memcpy(current, tick, sizeof(trader_tick));
+    self->pBoardcast->method->xBoardcase(self->pBoardcast, (char*)evt, sizeof(trader_mduser_evt));
+  }
   return 0;
 }
 

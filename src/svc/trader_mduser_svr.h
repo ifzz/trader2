@@ -29,6 +29,7 @@ struct trader_mduser_svr_def {
   
   trader_instrument_id_type* instruments;
   int instrumentNumber;
+  trader_tick* ticks;
   
   trader_mduser_svr_method* pMethod;
 
