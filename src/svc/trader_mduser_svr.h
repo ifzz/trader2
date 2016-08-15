@@ -16,6 +16,9 @@ typedef struct trader_mduser_svr_def trader_mduser_svr;
 typedef struct trader_mduser_svr_method_def trader_mduser_svr_method;
 struct trader_mduser_svr_def {
   struct event_base *pBase;
+  
+  struct event* pSigIntEvt;
+  struct event* pSigTermEvt;
 
   redisContext* pRedisCtx;
 
