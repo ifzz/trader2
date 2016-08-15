@@ -34,6 +34,9 @@
 #define MDUSER_CNN_BACKUP_PASSWD "MDUSER.CNN.BACKUP.PASSWD"
 #define MDUSER_CNN_BACKUP_ADDR "MDUSER.CNN.BACKUP.ADDR"
 
+#define MDUSER_INSTUMENTS "MDUSER.INSTUMENTS"
+
+
 static int trader_mduser_svr_init(trader_mduser_svr* self);
 static int trader_mduser_svr_run(trader_mduser_svr* self);
 static int trader_mduser_svr_proc(trader_mduser_svr* self, trader_mduser_evt* evt);
@@ -45,8 +48,8 @@ static void trader_mduser_svr_signal_cb(evutil_socket_t fd, short event, void *a
 static void trader_mduser_svr_tick_cb(void* arg, trader_mduser_evt* evt);
 
 static int trader_mduser_svr_init_cnn(trader_mduser_svr* self);
-
 static int trader_mduser_svr_init_boardcast(trader_mduser_svr* self);
+static int trader_mduser_svr_init_instruments(trader_mduser_svr* self);
 
 static int trader_mduser_svr_redis_get(trader_mduser_svr* self const char* key, char* val, int size);
 
@@ -63,6 +66,50 @@ trader_mduser_svr_method* trader_mduser_svr_method_get()
 
 int trader_mduser_svr_init_cnn(trader_mduser_svr* self)
 {
+  char brokerid[16];
+  char user[16];
+  char passwd[16];
+  char addr[64];
+  char workspace[64];
+  trader_mduser_api_method* api_imp = NULL;
+  int nRet = 0;
+  #ifdef LTS
+  //LTS
+#include "trader_mduser_api_lts.h"
+  api_imp = trader_mduser_api_lts_method_get();
+#endif
+
+#ifdef CTP
+  //CTP
+#include "trader_mduser_api_ctp.h"
+  api_imp = trader_mduser_api_ctp_method_get();
+#endif
+
+#ifdef FEMAS
+  //FEMAS
+#include "trader_mduser_api_femas_method_get.h"
+  api_imp = trader_mduser_api_femas_method_get();
+#endif
+  
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_MAIN_BROKER_ID, brokerid, sizeof(brokerid));
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_MAIN_USER, user, sizeof(user));
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_MAIN_PASSWD, passwd, sizeof(passwd));
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_MAIN_ADDR, addr, sizeof(addr));
+  self->pCnnMain->pMethod->xInit(self->pCnnMain, self->pBase,
+    brokerid, user, passwd, addr, "./main/",
+    trader_mduser_svr_tick_cb, self,
+    self->instruments, self->instrumentNumber,
+    api_imp);
+
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_BACKUP_BROKER_ID, brokerid, sizeof(brokerid));
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_BACKUP_USER, user, sizeof(user));
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_BACKUP_PASSWD, passwd, sizeof(passwd));
+  nRet = trader_mduser_svr_redis_get(self, MDUSER_CNN_BACKUP_ADDR, addr, sizeof(addr));
+  self->pCnnBackup->pMethod->xInit(self->pCnnBackup, self->pBase,
+    brokerid, user, passwd, addr, "./backup/",
+    trader_mduser_svr_tick_cb, self,
+    self->instruments, self->instrumentNumber,
+    api_imp);
 
   return 0;
 }
@@ -79,6 +126,29 @@ int trader_mduser_svr_init_boardcast(trader_mduser_svr* self)
     ip, atoi(port));
   
   return 0;
+}
+
+int trader_mduser_svr_init_instruments(trader_mduser_svr* self)
+{
+  int nRet = -1;
+  int i;
+  redisReply* reply = (redisReply*)redisCommand(self->pRedisCtx, "SMEMBERS %s", MDUSER_INSTUMENTS);
+  redisReply* r;
+  do {
+    if(REDIS_REPLY_ARRAY == reply->type){
+      nRet = 0;
+      self->instrumentNumber = reply->elements;
+      self->instruments = (trader_instrument_id_type*)malloc(self->instrumentNumber * sizeof(trader_instrument_id_type));
+      for(i = 0; i < self->instrumentNumber; i++){
+        r = reply->element[i];
+        strncpy(self->instruments[i], r->str, sizeof(trader_instrument_id_type));
+      }
+      break;
+    }
+  }while(0);
+  freeReplyObject(reply);
+
+  return nRet;
 }
 
 int trader_mduser_svr_redis_get(trader_mduser_svr* self, const char* key, char* val, int size)
@@ -138,6 +208,9 @@ int trader_mduser_svr_init(trader_mduser_svr* self)
 
   CMN_ASSERT(0 == self->pRedisCtx->err);
 
+  nRet = trader_mduser_svr_init_instruments(self);
+  CMN_ASSERT(0 == nRet);
+
   nRet = trader_mduser_svr_init_cnn(self);
   CMN_ASSERT(0 == nRet);
   
@@ -157,20 +230,23 @@ int trader_mduser_svr_run(trader_mduser_svr* self)
   nRet = event_add(self->pSigTermEvt, NULL);
   CMN_ASSERT(nRet >= 0);
 
-  trader_mduser_api* pMduserApi = self->pMduserApi;
-  pMduserApi->pMethod->xStart(pMduserApi);
+  self->pCnnMain->pMethod->xStart(self->pCnnMain);
+  self->pCnnBackup->pMethod->xStart(self->pCnnBackup);
   
   nRet = event_base_dispatch(self->pBase);
 
-  pMduserApi->pMethod->xStop(pMduserApi);
+  self->pCnnMain->pMethod->xStop(self->pCnnMain);
+  self->pCnnBackup->pMethod->xStop(self->pCnnBackup);
+  
+  self->pBoardcast->method->xExit(self->pBoardcast);
   
   return 0;
 }
 
 int  trader_mduser_svr_proc(trader_mduser_svr* self, trader_mduser_evt* evt)
 {
-  //TODO
-
+  self->pBoardcast->method->xBoardcase(self->pBoardcast, (char*)evt, sizeof(trader_mduser_evt));
+  return 0;
 }
 
 void trader_mduser_svr_signal_cb(evutil_socket_t fd, short event, void *arg)
@@ -202,12 +278,17 @@ trader_mduser_svr* trader_mduser_svr_new()
 void trader_mduser_svr_free(trader_mduser_svr* self)
 {
   if(self) {
-    if(self->pMduserApi) {
-      trader_mduser_api_free(self->pMduserApi);
+    
+    if(self->pCnnMain){
+      trader_mduser_cnn_free(self->pCnnMain);
+    }
+    
+    if(self->pCnnBackup){
+      trader_mduser_cnn_free(self->pCnnBackup);
     }
 
-    if(self->pBufMduser) {
-      bufferevent_free(self->pBufMduser);
+    if(self->pBoardcast){
+      trader_mduser_boardcast_free(self->pBoardcast);
     }
 
     if(self->pSigTermEvt) {
