@@ -78,7 +78,7 @@ trader_mduser_api_method* trader_mduser_api_ctp_method_get()
 
 void trader_mduser_api_ctp_start(trader_mduser_api* self)
 {
-  CThostFtdcMdApi* pUserApi = CThostFtdcMdApi::CreateFtdcMdApi();
+  CThostFtdcMdApi* pUserApi = CThostFtdcMdApi::CreateFtdcMdApi(self->pWorkspace);
   CCtpMduserHandler* pHandler = new CCtpMduserHandler(ctp_mduser_api_cb_get(), (void*)self);
 
   trader_mduser_api_ctp* pImp = (trader_mduser_api_ctp*)malloc(sizeof(trader_mduser_api_ctp));
