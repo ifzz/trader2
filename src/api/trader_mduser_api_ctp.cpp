@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,8 +34,6 @@ static void ctp_mduser_on_rtn_depth_market_data(void* arg, CThostFtdcDepthMarket
 static void ctp_mduser_on_rsp_error(void* arg, CThostFtdcRspInfoField *pRspInfo, int nRequestID, int bIsLast);
 static void ctp_mduser_on_rsp_sub_market_data(void* arg, CThostFtdcSpecificInstrumentField *pSpecificInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, int bIsLast);
 static void ctp_mduser_on_rsp_un_sub_market_data(void* arg, CThostFtdcSpecificInstrumentField *pSpecificInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, int bIsLast);
-
-
 
 #ifdef __cplusplus
 }
