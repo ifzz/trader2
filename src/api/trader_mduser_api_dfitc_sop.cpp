@@ -26,25 +26,25 @@ static void trader_mduser_api_dfitc_sop_subscribe(trader_mduser_api* self, char*
 
 static dfitc_sec_mduser_api_cb* dfitc_sec_mduser_api_cb_get();
 
-static void dfitc_sop_on_front_connected(void* arg);
-static void dfitc_sop_on_front_disconnected(void* arg, int nReason);
-static void dfitc_sop_on_rtn_notice(void* arg, DFITCSECRspNoticeField *pNotice);
-static void dfitc_sop_on_rsp_error(void* arg, dFITCSECRspInfoField *pRspInfo);
-static void dfitc_sop_on_rsp_stockuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_stockuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_sopuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_sopuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_fasluserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_fasluserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_stocksubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_stockunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_sopsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_rsp_sopunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
-static void dfitc_sop_on_stockmarketdata(void* arg, DFITCStockDepthMarketDataField * pMarketDataField);
-static void dfitc_sop_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField * pMarketDataField);
-static void dfitc_sop_on_rsp_stockavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag);
-static void dfitc_sop_on_rsp_sopavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag);
-static void dfitc_sop_on_rsp_usermdpasswordupdate(void* arg, DFITCSECRspMDPasswordUpdateField *pMDPasswordUpdate,DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_front_connected(void* arg);
+static void dfitc_sop_mduser_on_front_disconnected(void* arg, int nReason);
+static void dfitc_sop_mduser_on_rtn_notice(void* arg, DFITCSECRspNoticeField *pNotice);
+static void dfitc_sop_mduser_on_rsp_error(void* arg, dFITCSECRspInfoField *pRspInfo);
+static void dfitc_sop_mduser_on_rsp_stockuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_stockuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_sopuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_sopuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_fasluserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_fasluserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_stocksubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_stockunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_sopsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_rsp_sopunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo);
+static void dfitc_sop_mduser_on_stockmarketdata(void* arg, DFITCStockDepthMarketDataField * pMarketDataField);
+static void dfitc_sop_mduser_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField * pMarketDataField);
+static void dfitc_sop_mduser_on_rsp_stockavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag);
+static void dfitc_sop_mduser_on_rsp_sopavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag);
+static void dfitc_sop_mduser_on_rsp_usermdpasswordupdate(void* arg, DFITCSECRspMDPasswordUpdateField *pMDPasswordUpdate,DFITCSECRspInfoField * pRspInfo);
 
 #ifdef __cplusplus
 }
@@ -144,37 +144,37 @@ void trader_mduser_api_dfitc_sop_subscribe(trader_mduser_api* self, char* instru
 dfitc_sec_mduser_api_cb* dfitc_sec_mduser_api_cb_get()
 {
   static dfitc_sec_mduser_api_cb dfitc_sec_mduser_api_cb_st ={
-    dfitc_sop_on_front_connected,
-    dfitc_sop_on_front_disconnected,
-    dfitc_sop_on_rtn_notice,
-    dfitc_sop_on_rsp_error,
-    dfitc_sop_on_rsp_stockuserlogin,
-    dfitc_sop_on_rsp_stockuserlogout,
-    dfitc_sop_on_rsp_sopuserlogin,
-    dfitc_sop_on_rsp_sopuserlogout,
-    dfitc_sop_on_rsp_fasluserlogin,
-    dfitc_sop_on_rsp_fasluserlogout,
-    dfitc_sop_on_rsp_stocksubmarketdata,
-    dfitc_sop_on_rsp_stockunsubmarketdata,
-    dfitc_sop_on_rsp_sopsubmarketdata,
-    dfitc_sop_on_rsp_sopunsubmarketdata,
-    dfitc_sop_on_stockmarketdata,
-    dfitc_sop_on_sopmarketdata,
-    dfitc_sop_on_rsp_stockavailablequot,
-    dfitc_sop_on_rsp_sopavailablequot,
-    dfitc_sop_on_rsp_usermdpasswordupdate
+    dfitc_sop_mduser_on_front_connected,
+    dfitc_sop_mduser_on_front_disconnected,
+    dfitc_sop_mduser_on_rtn_notice,
+    dfitc_sop_mduser_on_rsp_error,
+    dfitc_sop_mduser_on_rsp_stockuserlogin,
+    dfitc_sop_mduser_on_rsp_stockuserlogout,
+    dfitc_sop_mduser_on_rsp_sopuserlogin,
+    dfitc_sop_mduser_on_rsp_sopuserlogout,
+    dfitc_sop_mduser_on_rsp_fasluserlogin,
+    dfitc_sop_mduser_on_rsp_fasluserlogout,
+    dfitc_sop_mduser_on_rsp_stocksubmarketdata,
+    dfitc_sop_mduser_on_rsp_stockunsubmarketdata,
+    dfitc_sop_mduser_on_rsp_sopsubmarketdata,
+    dfitc_sop_mduser_on_rsp_sopunsubmarketdata,
+    dfitc_sop_mduser_on_stockmarketdata,
+    dfitc_sop_mduser_on_sopmarketdata,
+    dfitc_sop_mduser_on_rsp_stockavailablequot,
+    dfitc_sop_mduser_on_rsp_sopavailablequot,
+    dfitc_sop_mduser_on_rsp_usermdpasswordupdate
   };
 
   return &dfitc_sec_mduser_api_cb_st;
 }
 
-void dfitc_sop_on_front_connected(void* arg)
+void dfitc_sop_mduser_on_front_connected(void* arg)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   trader_mduser_api_on_front_connected(self);
 }
 
-void dfitc_sop_on_front_disconnected(void* arg, int nReason)
+void dfitc_sop_mduser_on_front_disconnected(void* arg, int nReason)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   int errNo = nReason;
@@ -205,11 +205,11 @@ void dfitc_sop_on_front_disconnected(void* arg, int nReason)
 
 }
 
-void dfitc_sop_on_rtn_notice(void* arg, DFITCSECRspNoticeField *pNotice)
+void dfitc_sop_mduser_on_rtn_notice(void* arg, DFITCSECRspNoticeField *pNotice)
 {
 }
 
-void dfitc_sop_on_rsp_error(void* arg, DFITCSECRspInfoField *pRspInfo)
+void dfitc_sop_mduser_on_rsp_error(void* arg, DFITCSECRspInfoField *pRspInfo)
 {  
   trader_mduser_api* self = (trader_mduser_api*)arg;
   
@@ -223,15 +223,15 @@ void dfitc_sop_on_rsp_error(void* arg, DFITCSECRspInfoField *pRspInfo)
   trader_mduser_api_on_rsp_error(self, errNo, errMsg);
 }
 
-void dfitc_sop_on_rsp_stockuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_stockuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo)
 {
 }
 
-void dfitc_sop_on_rsp_stockuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_stockuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo)
 {
 }
 
-void dfitc_sop_on_rsp_sopuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_sopuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   
@@ -246,7 +246,7 @@ void dfitc_sop_on_rsp_sopuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUs
 
 }
 
-void dfitc_sop_on_rsp_sopuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_sopuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   
@@ -260,23 +260,23 @@ void dfitc_sop_on_rsp_sopuserlogout(void* arg, DFITCSECRspUserLogoutField * pRsp
   trader_mduser_api_on_rsp_user_logout(self, errNo, errMsg);
 }
 
-void dfitc_sop_on_rsp_fasluserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_fasluserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo)
 {
 }
 
-void dfitc_sop_on_rsp_fasluserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_fasluserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo)
 {
 }
 
-void dfitc_sop_on_rsp_stocksubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_stocksubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
 {
 }
 
-void dfitc_sop_on_rsp_stockunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_stockunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
 {
 }
 
-void dfitc_sop_on_rsp_sopsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_sopsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   
@@ -293,7 +293,7 @@ void dfitc_sop_on_rsp_sopsubmarketdata(void* arg, DFITCSECSpecificInstrumentFiel
 
 }
 
-void dfitc_sop_on_rsp_sopunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_sopunsubmarketdata(void* arg, DFITCSECSpecificInstrumentField * pSpecificInstrument, DFITCSECRspInfoField * pRspInfo)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   
@@ -308,11 +308,11 @@ void dfitc_sop_on_rsp_sopunsubmarketdata(void* arg, DFITCSECSpecificInstrumentFi
   return ;
 }
 
-void dfitc_sop_on_stockmarketdata(void* arg, DFITCStockDepthMarketDataField * pMarketDataField)
+void dfitc_sop_mduser_on_stockmarketdata(void* arg, DFITCStockDepthMarketDataField * pMarketDataField)
 {
 }
 
-void dfitc_sop_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField * pMarketDataField)
+void dfitc_sop_mduser_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField * pMarketDataField)
 {
   trader_mduser_api* self = (trader_mduser_api*)arg;
   trader_tick oTick;
@@ -333,15 +333,15 @@ void dfitc_sop_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField * pMarke
 
 }
 
-void dfitc_sop_on_rsp_stockavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag)
+void dfitc_sop_mduser_on_rsp_stockavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag)
 {
 }
 
-void dfitc_sop_on_rsp_sopavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag)
+void dfitc_sop_mduser_on_rsp_sopavailablequot(void* arg, DFITCRspQuotQryField * pAvailableQuotInfo, DFITCSECRspInfoField * pRspInfo, int flag)
 {
 }
 
-void dfitc_sop_on_rsp_usermdpasswordupdate(void* arg, DFITCSECRspMDPasswordUpdateField *pMDPasswordUpdate,DFITCSECRspInfoField * pRspInfo)
+void dfitc_sop_mduser_on_rsp_usermdpasswordupdate(void* arg, DFITCSECRspMDPasswordUpdateField *pMDPasswordUpdate,DFITCSECRspInfoField * pRspInfo)
 {
 }
 
