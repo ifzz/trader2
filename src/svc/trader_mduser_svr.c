@@ -34,7 +34,7 @@
 #define MDUSER_CNN_BACKUP_PASSWD "MDUSER.CNN.BACKUP.PASSWD"
 #define MDUSER_CNN_BACKUP_ADDR "MDUSER.CNN.BACKUP.ADDR"
 
-#define MDUSER_INSTUMENTS "MDUSER.INSTUMENTS"
+#define MDUSER_INSTRUMENTS "MDUSER.INSTRUMENTS"
 
 
 static int trader_mduser_svr_init(trader_mduser_svr* self);
@@ -137,7 +137,7 @@ int trader_mduser_svr_init_instruments(trader_mduser_svr* self)
 {
   int nRet = -1;
   int i;
-  redisReply* reply = (redisReply*)redisCommand(self->pRedisCtx, "SMEMBERS %s", MDUSER_INSTUMENTS);
+  redisReply* reply = (redisReply*)redisCommand(self->pRedisCtx, "SMEMBERS %s", MDUSER_INSTRUMENTS);
   redisReply* r;
   do {
     if(REDIS_REPLY_ARRAY == reply->type){
