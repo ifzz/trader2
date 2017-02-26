@@ -15,7 +15,7 @@
 #include "trader_trader_api.h"
 #include "trader_trader_api_lts.h"
 
-#define FEMAS // FEMAS LTS CTP
+#define DFITC_SEC // FEMAS LTS CTP DFITC_SEC
 
 typedef struct trader_trader_test_def trader_trader_test;
 struct trader_trader_test_def {
@@ -131,6 +131,15 @@ void test_stdin_read_cb(struct bufferevent *bev, void *arg)
         1
       );
 #endif
+#ifdef DFITC_SEC
+      test->pApi->pMethod->xOrderInsert(test->pApi, "10000860", "1", 
+        '0',/*SECURITY_FTDC_D_Buy*/
+        '0',/*SECURITY_FTDC_OF_Open*/
+        0.2824f,
+        1
+      );
+#endif
+
       break;
     case '3':
 #ifdef CTP
@@ -142,7 +151,10 @@ void test_stdin_read_cb(struct bufferevent *bev, void *arg)
 #ifdef FEMAS
       test->pApi->pMethod->xOrderAction(test->pApi, "IF1608", "2", "1", "1");
 #endif
-      break;
+#ifdef DFITC_SEC
+      test->pApi->pMethod->xOrderAction(test->pApi, "10000860", "2", "1", "1");
+#endif
+    break;
     case '4':
       test->pApi->pMethod->xQryInstrument(test->pApi);
       break;
@@ -187,8 +199,9 @@ void test_trader_proc(trader_trader_test* test, trader_trader_evt* evt)
     FILE* fp = fopen("inst.txt", "a+");
     if(fp) {
       fprintf(fp,
-        "%s,%d,%lf,%lf\n",
+        "%s,%s,%d,%lf,%lf\n",
         pInstrument->InstrumentID,
+        pInstrument->ExchangeID,
         pInstrument->VolumeMultiple,
         pInstrument->PriceTick,
         pInstrument->UnitMargin
@@ -282,6 +295,15 @@ int main(int argc, char* argv[])
     test->pApi->pMethod->xSetUser(test->pApi, "0162", "9901540501", "282038");
     test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://118.126.16.227:17041");
 #endif
+
+#ifdef DFITC_SEC
+      //DFITC_SEC
+#include "trader_trader_api_dfitc_sop.h"
+    test->pApi = trader_trader_api_new(pair[1], trader_trader_api_dfitc_sop_method_get());
+    test->pApi->pMethod->xSetUser(test->pApi, "0000", "110100000920", "123456");
+    test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://203.86.95.187:10910");
+#endif
+
   
   test->pApi->pMethod->xSetWorkspace(test->pApi, ".");
   

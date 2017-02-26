@@ -14,7 +14,7 @@
 #include "trader_data.h"
 #include "trader_mduser_api.h"
 
-#define FEMAS // FEMAS LTS CTP
+#define DFITC_SEC // FEMAS LTS CTP DFITC_SEC
 
 typedef struct trader_mduser_test_def trader_mduser_test;
 struct trader_mduser_test_def {
@@ -115,6 +115,9 @@ void test_stdin_read_cb(struct bufferevent *bev, void *arg)
 #ifdef FEMAS
       test->pApi->pMethod->xSubscribe(test->pApi, "IF1608");
 #endif
+#ifdef DFITC_SEC
+      test->pApi->pMethod->xSubscribe(test->pApi, "10000860");
+#endif      
       break;
     case '8':
       event_base_loopexit(test->pBase, &tv);
@@ -228,6 +231,15 @@ int main(int argc, char* argv[])
   test->pApi->pMethod->xSetUser(test->pApi, "0162", "9901540501", "282038");
   test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://118.126.16.227:17101");
 #endif
+
+#ifdef DFITC_SEC
+    //DFITC_SEC
+#include "trader_mduser_api_dfitc_sop.h"
+    test->pApi = trader_mduser_api_new(pair[1], trader_mduser_api_dfitc_sop_method_get());
+    test->pApi->pMethod->xSetUser(test->pApi, "0000", "110100000920", "123456");
+    test->pApi->pMethod->xSetFrontAddr(test->pApi, "tcp://203.86.95.187:10915");
+#endif
+
   
   test->pApi->pMethod->xSetWorkspace(test->pApi, "./");
   

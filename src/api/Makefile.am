@@ -1,7 +1,7 @@
 noinst_LIBRARIES=libmduserapi.a libtraderapi.a
-noinst_PROGRAMS=libltsmduser.so libltstrader.so libctpmduser.so libctptrader.so libfemasmduser.so libfemastrader.so 
+noinst_PROGRAMS=libltsmduser.so libltstrader.so libctpmduser.so libctptrader.so libfemasmduser.so libfemastrader.so libdfitcmduser.so libdfitctrader.so
 AM_CPPFLAGS = -I$(top_srcdir)/libevent -I$(top_srcdir)/libevent/compat/sys -I$(top_srcdir)/src -I$(top_srcdir)/src/util
-AM_CPPFLAGS +=  -I$(top_srcdir)/lts -I$(top_srcdir)/ctp -I$(top_srcdir)/femas -I$(top_srcdir)/src/wrap -fPIC
+AM_CPPFLAGS +=  -I$(top_srcdir)/lts -I$(top_srcdir)/ctp -I$(top_srcdir)/femas -I$(top_srcdir)/dfitc_sec -I$(top_srcdir)/src/wrap -fPIC
 libmduserapi_a_SOURCES=trader_mduser_api.c
 libtraderapi_a_SOURCES=trader_trader_api.c
 
@@ -17,3 +17,7 @@ libfemasmduser_so_SOURCES=FemasMduserHandler.cpp trader_mduser_api_femas.cpp
 libfemasmduser_so_LDFLAGS = -shared
 libfemastrader_so_SOURCES=FemasTraderHandler.cpp trader_trader_api_femas.cpp
 libfemastrader_so_LDFLAGS = -shared
+libdfitcmduser_so_SOURCES=DFITCSECMduserHandler.cpp trader_mduser_api_dfitc_sop.cpp
+libdfitcmduser_so_LDFLAGS = -shared
+libdfitctrader_so_SOURCES=DFITCSECTraderHandler.cpp trader_trader_api_dfitc_sop.cpp
+libdfitctrader_so_LDFLAGS = -shared

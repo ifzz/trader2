@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-typedef dfitc_sec_mduser_api_cb_def dfitc_sec_mduser_api_cb;
+typedef struct dfitc_sec_mduser_api_cb_def dfitc_sec_mduser_api_cb;
 
 struct dfitc_sec_mduser_api_cb_def{
   /** 

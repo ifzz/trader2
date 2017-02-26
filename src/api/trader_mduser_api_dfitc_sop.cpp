@@ -29,7 +29,7 @@ static dfitc_sec_mduser_api_cb* dfitc_sec_mduser_api_cb_get();
 static void dfitc_sop_mduser_on_front_connected(void* arg);
 static void dfitc_sop_mduser_on_front_disconnected(void* arg, int nReason);
 static void dfitc_sop_mduser_on_rtn_notice(void* arg, DFITCSECRspNoticeField *pNotice);
-static void dfitc_sop_mduser_on_rsp_error(void* arg, dFITCSECRspInfoField *pRspInfo);
+static void dfitc_sop_mduser_on_rsp_error(void* arg, DFITCSECRspInfoField *pRspInfo);
 static void dfitc_sop_mduser_on_rsp_stockuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
 static void dfitc_sop_mduser_on_rsp_stockuserlogout(void* arg, DFITCSECRspUserLogoutField * pRspUsrLogout, DFITCSECRspInfoField * pRspInfo);
 static void dfitc_sop_mduser_on_rsp_sopuserlogin(void* arg, DFITCSECRspUserLoginField * pRspUserLogin, DFITCSECRspInfoField * pRspInfo);
@@ -319,7 +319,8 @@ void dfitc_sop_mduser_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField *
   memset(&oTick, 0, sizeof(trader_tick));
 
   strcpy(oTick.InstrumentID, pMarketDataField->specificDataField.contractID);
-  strcpy(oTick.TradingDay, pMarketDataField->staticDataField.tradingDay);
+  //TODO
+  //strcpy(oTick.TradingDay, pMarketDataField->staticDataField.tradingDay);
   strcpy(oTick.UpdateTime, &(pMarketDataField->sharedDataField.updateTime[4]));
   oTick.UpdateMillisec = 0;
   oTick.BidPrice1 = pMarketDataField->sharedDataField.bidPrice1;

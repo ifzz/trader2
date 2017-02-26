@@ -191,7 +191,7 @@ m_pUserCb->xOnRspStockCalcAblePurchaseETFQty(m_parent, pData, pRspInfo);
 * @param bIsLast:返回值表明是否是最后一笔响应信息(0-否,1-是)
 */
 void CDfitcSecTraderHandler::OnRspStockQryFreezeFundsDetail(DFITCStockRspQryFreezeFundsDetailField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {
-m_pUserCb->xOnRspStockQryFreezeFundsDetail(m_parent, pData, pRspInfo);
+m_pUserCb->xOnRspStockQryFreezeFundsDetail(m_parent, pData, pRspInfo, bIsLast);
 }
 /**
 * STOCK-冻结证券明细查询响应
@@ -274,7 +274,7 @@ m_pUserCb->xOnStockWithdrawOrderRtn(m_parent, pData);
 * @param pRspInfo:指针若非空，返回错误信息地址，表明登录请求失败
 */
 void CDfitcSecTraderHandler::OnRspSOPUserLogin(DFITCSECRspUserLoginField *pData, DFITCSECRspInfoField *pRspInfo) {
-m_pUserCb->xOnRspUserLogin(m_parent, pData, pRspInfo);
+m_pUserCb->xOnRspSOPUserLogin(m_parent, pData, pRspInfo);
 }
 /**
  * SOP-登出响应
@@ -282,7 +282,7 @@ m_pUserCb->xOnRspUserLogin(m_parent, pData, pRspInfo);
  * @param pRspInfo:指针若非空，返回错误信息地址，表明登出请求失败
  */
 void CDfitcSecTraderHandler::OnRspSOPUserLogout(DFITCSECRspUserLogoutField *pData, DFITCSECRspInfoField *pRspInfo) {
-m_pUserCb->xOnRspUserLogout(m_parent, pData, pRspInfo);
+m_pUserCb->xOnRspSOPUserLogout(m_parent, pData, pRspInfo);
 }
 /**
 * SOP-用户口令更新响应
@@ -359,7 +359,7 @@ m_pUserCb->xOnRspSOPQrySerialTrade(m_parent, pData, pRspInfo, bIsLast);
 * @param bIsLast:返回值表明是否是最后一笔响应信息(0-否,1-是)
 */
 void CDfitcSecTraderHandler::OnRspSOPQryPosition(DFITCSOPRspQryPositionField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {
-m_pUserCb->xOnRspSOPQryContactInfo(m_parent, pData, pRspInfo, bIsLast);
+m_pUserCb->xOnRspSOPQryPosition(m_parent, pData, pRspInfo, bIsLast);
 }
 /**
 * SOP-客户担保持仓查询响应
@@ -598,7 +598,7 @@ m_pUserCb->xOnRspFASLQryCrdtFunds(m_parent, pData, pRspInfo);
 * @param pData:指针若非空,返回用户信用合约信息响应信息结构地址,表明客户信用合约信息请求成功
 * @param pRspInfo:指针若非空，返回错误信息地址，表明客户信用合约信息请求失败
 */
-void CDfitcSecTraderHandler::OnRspFASLQryCrdtContract(DFITCFASLRspQryCrdtContractField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLat) {
+void CDfitcSecTraderHandler::OnRspFASLQryCrdtContract(DFITCFASLRspQryCrdtContractField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {
 m_pUserCb->xOnRspFASLQryCrdtContract(m_parent, pData, pRspInfo, bIsLast);
 }
 /**

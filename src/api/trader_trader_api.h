@@ -52,6 +52,8 @@ typedef struct trader_position_def trader_position;
 struct trader_instrument_def {
 	///合约代码
 	char InstrumentID [31];
+  ///交易所
+  char ExchangeID[20];
 	///合约数量乘数
 	int	VolumeMultiple;
 	///最小变动价位

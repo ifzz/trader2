@@ -100,7 +100,7 @@ static void dfitc_sop_on_rsp_fasl_entrust_crdt_order(void* arg, DFITCFASLRspEntr
 static void dfitc_sop_on_rsp_fasl_entrust_order(void* arg, DFITCFASLRspEntrustOrderField* pData, DFITCSECRspInfoField* pRspInfo);
 static void dfitc_sop_on_rsp_fasl_calc_able_entrust_crdt_qty(void* arg, DFITCFASLRspCalcAbleEntrustCrdtQtyField* pData, DFITCSECRspInfoField* pRspInfo);
 static void dfitc_sop_on_rsp_fasl_qrycrdt_funds(void* arg, DFITCFASLRspQryCrdtFundsField* pData, DFITCSECRspInfoField* pRspInfo);
-static void dfitc_sop_on_rsp_fasl_qrycrdt_contract(void* arg, DFITCFASLRspQryCrdtContractField* pData, DFITCSECRspInfoField* pRspInfo, boolbIsLat);
+static void dfitc_sop_on_rsp_fasl_qrycrdt_contract(void* arg, DFITCFASLRspQryCrdtContractField* pData, DFITCSECRspInfoField* pRspInfo, bool bIsLast);
 static void dfitc_sop_on_rsp_fasl_qrycrdt_con_change_info(void* arg, DFITCFASLRspQryCrdtConChangeInfoField* pData, DFITCSECRspInfoField* pRspInfo, bool bIsLast);
 static void dfitc_sop_on_rsp_fasl_transfer_funds(void* arg, DFITCStockRspTransferFundsField* pData, DFITCSECRspInfoField* pRspInfo);
 static void dfitc_sop_on_rsp_fasl_qry_account_info(void* arg, DFITCStockRspQryAccountField* pData, DFITCSECRspInfoField* pRspInfo);
@@ -202,7 +202,7 @@ void trader_trader_api_dfitc_sop_login(trader_trader_api* self)
   strcpy(reqUserLoginField.password, self->pPwd);
   reqUserLoginField.compressflag = DFITCSEC_COMPRESS_FALSE;
   
-  pTraderApi->ReqSOPUserLogin(&DFITCSECReqUserLoginField);
+  pTraderApi->ReqSOPUserLogin(&reqUserLoginField);
   return ;
 }
 
@@ -214,7 +214,7 @@ void trader_trader_api_dfitc_sop_logout(trader_trader_api* self)
   DFITCSECReqUserLogoutField userLogoutField;
   memset(&userLogoutField, 0, sizeof(userLogoutField));
   
-  userLogoutField.requestID = pImp->nRequestID++;
+  userLogoutField.requestID = pImp->nTraderRequestID++;
   strcpy(userLogoutField.accountID, self->pUser);
   
   pTraderApi->ReqSOPUserLogout(&userLogoutField);
@@ -231,14 +231,14 @@ int trader_trader_api_dfitc_sop_order_insert(trader_trader_api* self, char* inst
   memset(&inputOrderField, 0, sizeof(inputOrderField));
   
   //请求ID(Y)
-  inputOrderField.requestID = pImp->nRequestID++;
+  inputOrderField.requestID = pImp->nTraderRequestID++;
   //本地委托号(Y)
-	strcpy(inputOrderField.localOrderID, local_id);
+	inputOrderField.localOrderID = atol(local_id);
   //客户号(Y)
 	strcpy(inputOrderField.accountID, self->pUser);
   //交易所代码(Y)
   //TODO
-	strcpy(inputOrderField.exchangeID, "SSE");
+	strcpy(inputOrderField.exchangeID, "SH");
   //证劵代码(Y)
 	strcpy(inputOrderField.securityID, inst);
   //子账户编码(N)(预留字段)
@@ -248,9 +248,17 @@ int trader_trader_api_dfitc_sop_order_insert(trader_trader_api* self, char* inst
   //委托价格(N)
 	inputOrderField.entrustPrice = price;
   //委托类别(Y)
-	inputOrderField.entrustDirection = buy_sell;
+  if('1' == buy_sell){
+	  inputOrderField.entrustDirection = DFITCSEC_ED_Buy;
+  }else{
+	  inputOrderField.entrustDirection = DFITCSEC_ED_Sell;
+  }
   //开平标志(Y)
-	inputOrderField.openCloseFlag = open_close;
+  if('1' == open_close){
+    inputOrderField.openCloseFlag = DFITCSEC_OCF_Open;
+  }else{
+    inputOrderField.openCloseFlag = DFITCSEC_OCF_Close;
+  }
   //备兑类型(Y)
 	inputOrderField.coveredFlag = DFITCSEC_CF_UnCovered;
   //订单类型(Y)
@@ -260,11 +268,11 @@ int trader_trader_api_dfitc_sop_order_insert(trader_trader_api* self, char* inst
   //委托单类别(Y)
   inputOrderField.orderCategory = DFITCSEC_OC_GeneralOrder;
   //扩展流水号(N)(预留字段)
-  inputOrderField.serialID = 0;
+ // inputOrderField.serialID = 0;
   //厂商ID(N)
-	strcpy(inputOrderField.devID, "");
+	//strcpy(inputOrderField.devID, "");
   //用户自定义字段(N)
-	strcpy(inputOrderField.devDecInfo, "");
+	//strcpy(inputOrderField.devDecInfo, "");
 
   pTraderApi->ReqSOPEntrustOrder(&inputOrderField);
   return 0;
@@ -279,13 +287,13 @@ int trader_trader_api_dfitc_sop_order_action(trader_trader_api* self, char* inst
   memset(&inputOrderActionField, 0, sizeof(inputOrderActionField));
 
   //请求ID(Y)
-  inputOrderActionField.requestID = pImp->nRequestID++;
+  inputOrderActionField.requestID = pImp->nTraderRequestID++;
   //客户号(Y)
 	strcpy(inputOrderActionField.accountID, self->pUser);
   //柜台委托号(N)
-	strcpy(inputOrderActionField.spdOrderID, "");
+	inputOrderActionField.spdOrderID = 0;
   //本地委托号(N)(柜台委托号和本地委托号二选一)
-	strcpy(inputOrderActionField.localOrderID, org_local_id);
+	inputOrderActionField.localOrderID = atol(org_local_id);
   
   pTraderApi->ReqSOPWithdrawOrder(&inputOrderActionField);
   return 0;
@@ -301,7 +309,7 @@ int trader_trader_api_dfitc_sop_qry_instrument(trader_trader_api* self)
   memset(&qryInstrumentField, 0, sizeof(qryInstrumentField));
 
   //请求ID(Y)
-  qryInstrumentField.requestID = pImp->nRequestID++;
+  qryInstrumentField.requestID = pImp->nTraderRequestID++;
   //客户号(Y)
 	strcpy(qryInstrumentField.accountID, self->pUser);
   /*
@@ -327,7 +335,7 @@ int trader_trader_api_dfitc_sop_qry_user_investor(trader_trader_api* self)
   memset(&qryInvestorField, 0, sizeof(qryInvestorField));
   
   //请求ID(Y)
-  qryInvestorField.requestID = pImp->nRequestID++;
+  qryInvestorField.requestID = pImp->nTraderRequestID++;
   //客户号(Y)
 	strcpy(qryInvestorField.accountID, self->pUser);
   
@@ -344,7 +352,7 @@ int trader_trader_api_dfitc_sop_qry_investor_position(trader_trader_api* self)
   memset(&qryInvestorPositionField, 0, sizeof(qryInvestorPositionField));
 
   //请求ID(Y)
-  qryInvestorPositionField.requestID = pImp->nRequestID++;
+  qryInvestorPositionField.requestID = pImp->nTraderRequestID++;
   //客户号(Y)
 	strcpy(qryInvestorPositionField.accountID, self->pUser);
   /*
@@ -367,7 +375,7 @@ int trader_trader_api_dfitc_sop_qry_trading_account(trader_trader_api* self)
   memset(&qryTradingAccountField, 0, sizeof(qryTradingAccountField));
 
   //请求ID(Y)
-  qryTradingAccountField.requestID = pImp->nRequestID++;
+  qryTradingAccountField.requestID = pImp->nTraderRequestID++;
   //客户号(Y)
 	strcpy(qryTradingAccountField.accountID, self->pUser);
   /*
@@ -835,6 +843,7 @@ void dfitc_sop_on_rsp_sop_qry_account_info(void* arg, DFITCSOPRspQryAccountField
     DFITCSECPasswdSyncFlagType           pwdSynFlag;               //密码同步标志
     DFITCSECAccountNodeIDType            accountNodeID;            //客户所属节点编号
     */
+    investor = pData->branchID;
   }
   
   trader_trader_api_on_rsp_qry_user_investor(self, investor, errNo, errMsg);
@@ -866,7 +875,7 @@ void dfitc_sop_on_rsp_sop_qry_contact_info(void* arg, DFITCSOPRspQryContactField
     errMsg = pRspInfo->errorMsg;
   }
 
-  if(pInstrument) {
+  if(pData) {
     /*
     DFITCSECRequestIDType               requestID;                 //请求ID
     DFITCSECAccountIDType               accountID;                 //客户号
@@ -936,7 +945,11 @@ void dfitc_sop_on_rsp_sop_qry_contact_info(void* arg, DFITCSOPRspQryContactField
     DFITCSESecurityOptionIndexType      optionIndex;               //股票期权索引值
     DFITCSECMiniPriceChangeType         miniPriceChange;           //最小变动价位
     */
-    //TODO
+    strcpy(traderInstrument.InstrumentID, pData->securityOptionID);
+    strcpy(traderInstrument.ExchangeID, pData->exchangeID);
+    traderInstrument.VolumeMultiple = pData->handQty;
+    traderInstrument.PriceTick = pData->miniPriceChange;
+    traderInstrument.UnitMargin = pData->depositUnit;
   }
 
   trader_trader_api_on_rsp_qry_instrument(self, &traderInstrument, errNo, errMsg, bIsLast);
@@ -1003,28 +1016,28 @@ void dfitc_sop_on_sop_entrust_order_rtn(void* arg, DFITCSOPEntrustOrderRtnField*
   DFITCSECTDevIDType                   devID;                    //厂商ID(N),下单时填入该字段，才会返回
   DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N)，下单时填入该字段，才会返回
   */
-  
+  DFITCSOPEntrustOrderRtnField* pOrder = pData;
   // 合约代码
   char InstrumentID [31];
-  strcpy(traderOrder.InstrumentID, pOrder->InstrumentID);
+  strcpy(traderOrder.InstrumentID, pData->securityID);
   // 本地报单编号
-  strcpy(traderOrder.UserOrderLocalID, pOrder->OrderRef);
+  snprintf(traderOrder.UserOrderLocalID, sizeof(traderOrder.UserOrderLocalID), "%012ld", pOrder->localOrderID);
   // 买卖
-  traderOrder.Direction = pOrder->Direction;
+  traderOrder.Direction = pOrder->entrustDirection;
   // 开平
-  traderOrder.OffsetFlag = pOrder->CombOffsetFlag[0];
+  traderOrder.OffsetFlag = pOrder->openCloseFlag;
   ///投机套保标志
-  traderOrder.HedgeFlag = pOrder->CombHedgeFlag[0];
+  //traderOrder.HedgeFlag = pOrder->CombHedgeFlag[0];
   // 报单价格
-  traderOrder.LimitPrice = pOrder->LimitPrice;
+  traderOrder.LimitPrice = pOrder->entrustPrice;
   // 报单手数
-  traderOrder.VolumeOriginal = pOrder->VolumeTotalOriginal;
+  traderOrder.VolumeOriginal = pOrder->entrustQty;
   // 成交手数
-  traderOrder.VolumeTraded = pOrder->VolumeTraded;
+  traderOrder.VolumeTraded = 0;
   // 订单状态
-  traderOrder.OrderStatus = pOrder->OrderStatus;
+  traderOrder.OrderStatus = pOrder->withdrawFlag[0];
   ///插入时间
-  strcpy(traderOrder.InsertTime, pOrder->InsertTime);
+  strcpy(traderOrder.InsertTime, pOrder->entrustTime);
 
   trader_trader_api_on_rtn_order(self, &traderOrder);
 
@@ -1060,20 +1073,23 @@ void dfitc_sop_on_sop_trade_rtn(void* arg, DFITCSOPTradeRtnField* pData)
   DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N),下单时填入该字段，才会返回
   DFITCSECTimeType                     tradeTime;                //成交时间
   */
+
+  DFITCSOPTradeRtnField* pTrade = pData;
   ///合约代码
-  strcpy(traderTrade.InstrumentID, pTrade->InstrumentID);
+  strcpy(traderTrade.InstrumentID, pTrade->securityID);
   ///本地报单编号
-  strcpy(traderTrade.UserOrderLocalID, pTrade->OrderRef);
+  snprintf(traderTrade.UserOrderLocalID, sizeof(traderTrade.UserOrderLocalID), "%012ld", pTrade->localOrderID);
   ///交易日
-  strcpy(traderTrade.TradingDay, pTrade->TradingDay);
+  //TODO
+  //strcpy(traderTrade.TradingDay, pTrade->TradingDay);
   ///成交时间
-  strcpy(traderTrade.TradeTime, pTrade->TradeTime);
+  strcpy(traderTrade.TradeTime, pTrade->tradeTime);
   ///成交价格
-  traderTrade.TradePrice = pTrade->Price;
+  traderTrade.TradePrice = pTrade->tradePrice;
   ///成交数量
-  traderTrade.TradeVolume = pTrade->Volume;
+  traderTrade.TradeVolume = pTrade->tradeQty;
   //成交编号
-  strcpy(traderTrade.TradeID, pTrade->TradeID);
+  strcpy(traderTrade.TradeID, pTrade->tradeID);
 
   trader_trader_api_on_rtn_trade(self, &traderTrade);
 
@@ -1106,28 +1122,28 @@ void dfitc_sop_on_sop_withdraw_order_rtn(void* arg, DFITCSOPWithdrawOrderRtnFiel
   DFITCSECTDevIDType                   devID;                    //厂商ID(N),下单时填入该字段，才会返回
   DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N),下单时填入该字段，才会返回
   */
-  
+  DFITCSOPWithdrawOrderRtnField* pOrder = pData;
   // 合约代码
   char InstrumentID [31];
-  strcpy(traderOrder.InstrumentID, pOrder->InstrumentID);
+  strcpy(traderOrder.InstrumentID, pOrder->securityID);
   // 本地报单编号
-  strcpy(traderOrder.UserOrderLocalID, pOrder->OrderRef);
+  snprintf(traderOrder.UserOrderLocalID, sizeof(traderOrder.UserOrderLocalID), "%012ld", pOrder->localOrderID);
   // 买卖
-  traderOrder.Direction = pOrder->Direction;
+  traderOrder.Direction = pOrder->entrustDirection;
   // 开平
-  traderOrder.OffsetFlag = pOrder->CombOffsetFlag[0];
+  traderOrder.OffsetFlag = pOrder->openCloseFlag;
   ///投机套保标志
-  traderOrder.HedgeFlag = pOrder->CombHedgeFlag[0];
+  traderOrder.HedgeFlag = '0';
   // 报单价格
-  traderOrder.LimitPrice = pOrder->LimitPrice;
+  traderOrder.LimitPrice = 0;
   // 报单手数
-  traderOrder.VolumeOriginal = pOrder->VolumeTotalOriginal;
+  traderOrder.VolumeOriginal = pOrder->withdrawQty + pOrder->tradeQty;
   // 成交手数
-  traderOrder.VolumeTraded = pOrder->VolumeTraded;
+  traderOrder.VolumeTraded = pOrder->tradeQty;
   // 订单状态
-  traderOrder.OrderStatus = pOrder->OrderStatus;
+  traderOrder.OrderStatus = pOrder->withdrawFlag[0];
   ///插入时间
-  strcpy(traderOrder.InsertTime, pOrder->InsertTime);
+  strcpy(traderOrder.InsertTime, "");
 
   trader_trader_api_on_rtn_order(self, &traderOrder);
 
@@ -1177,7 +1193,7 @@ void dfitc_sop_on_rsp_fasl_qrycrdt_funds(void* arg, DFITCFASLRspQryCrdtFundsFiel
 {
 }
 
-void dfitc_sop_on_rsp_fasl_qrycrdt_contract(void* arg, DFITCFASLRspQryCrdtContractField* pData, DFITCSECRspInfoField* pRspInfo, boolbIsLat)
+void dfitc_sop_on_rsp_fasl_qrycrdt_contract(void* arg, DFITCFASLRspQryCrdtContractField* pData, DFITCSECRspInfoField* pRspInfo, bool bIsLast)
 {
 }
 

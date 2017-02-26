@@ -22,7 +22,7 @@ CDfitcSecMduserHandler::~CDfitcSecMduserHandler()
 * 网络连接正常响应
 */
 void CDfitcSecMduserHandler::OnFrontConnected(){
-m_pUserCb->xOnRsp(m_parent);
+m_pUserCb->xOnFrontConnected(m_parent);
 }
 
 /**
