@@ -262,7 +262,7 @@ int trader_trader_api_dfitc_sop_order_insert(trader_trader_api* self, char* inst
   //备兑类型(Y)
 	inputOrderField.coveredFlag = DFITCSEC_CF_UnCovered;
   //订单类型(Y)
-	inputOrderField.orderType = DFITCSEC_OT_LimitPrice;
+	inputOrderField.orderType = DFITCSEC_SOP_LimitPrice;
   //订单时效限制(N)
   inputOrderField.orderExpiryDate = DFITCSEC_OE_NONE;
   //委托单类别(Y)
