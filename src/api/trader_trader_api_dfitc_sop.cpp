@@ -248,13 +248,13 @@ int trader_trader_api_dfitc_sop_order_insert(trader_trader_api* self, char* inst
   //委托价格(N)
 	inputOrderField.entrustPrice = price;
   //委托类别(Y)
-  if('1' == buy_sell){
+  if('0' == buy_sell){
 	  inputOrderField.entrustDirection = DFITCSEC_ED_Buy;
   }else{
 	  inputOrderField.entrustDirection = DFITCSEC_ED_Sell;
   }
   //开平标志(Y)
-  if('1' == open_close){
+  if('0' == open_close){
     inputOrderField.openCloseFlag = DFITCSEC_OCF_Open;
   }else{
     inputOrderField.openCloseFlag = DFITCSEC_OCF_Close;
