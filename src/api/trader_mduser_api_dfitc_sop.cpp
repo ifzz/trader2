@@ -318,7 +318,7 @@ void dfitc_sop_mduser_on_sopmarketdata(void* arg, DFITCSOPDepthMarketDataField *
   trader_tick oTick;
   memset(&oTick, 0, sizeof(trader_tick));
 
-  strcpy(oTick.InstrumentID, pMarketDataField->specificDataField.contractID);
+  strcpy(oTick.InstrumentID, pMarketDataField->staticDataField.securityID);
   //TODO
   //strcpy(oTick.TradingDay, pMarketDataField->staticDataField.tradingDay);
   strcpy(oTick.UpdateTime, &(pMarketDataField->sharedDataField.updateTime[4]));
